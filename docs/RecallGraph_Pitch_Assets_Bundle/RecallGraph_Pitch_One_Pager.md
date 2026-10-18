@@ -27,7 +27,7 @@ A single isolated run using **seven authored fictional documents** and local `ll
 **Important limitations of this run:** the seven documents are authored fiction; this is one model, one scenario and one operator. It is not an accuracy, time-savings or customer-demand study. The 8 identifier-only AI facts were not counted as grounded and were not reviewed. The current automated suite passes (40 .NET tests, 25 browser tests), but that is engineering verification, not real-world validation.
 
 ### What is demonstrated vs. not yet proven
-**Demonstrated in the current prototype:** local Llama extraction on supported text; parser-backed claims; source locators; relationship proposals; human confirmation/rejection; a persisted trace; visible quantity/identifier findings; HTML, JSON and CSV exports; candidate vs. confirmed scope.
+**Demonstrated in the current prototype:** local Llama extraction on supported text; parser-backed claims; source locators; relationship proposals; human confirmation/rejection; a persisted trace; visible quantity/identifier findings; HTML, JSON, CSV and five-worksheet XLSX exports; candidate vs. confirmed scope.
 
 **Not yet established:** customer validation, willingness to pay, time saved against a manual baseline, performance on real or independently supplied records, statistical extraction accuracy, ERP integrations, OCR for scans/images, or production-grade identity and access management.
 

@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: src/frontend/package-lock.json
+
+      - name: Restore .NET dependencies
+        run: dotnet restore RecallGraph.slnx
+
+      - name: Build .NET solution
+        run: dotnet build RecallGraph.slnx --no-restore --configuration Release
+
+      - name: Run .NET tests
+        run: dotnet test RecallGraph.slnx --no-build --configuration Release --logger "trx;LogFileName=test-results.trx"
+
+      - name: Install frontend dependencies
+        working-directory: src/frontend
+        run: npm ci
+
+      - name: Lint frontend
+        working-directory: src/frontend
+        run: npm run lint
+
+      - name: Build frontend
+        working-directory: src/frontend
+        run: npm run build

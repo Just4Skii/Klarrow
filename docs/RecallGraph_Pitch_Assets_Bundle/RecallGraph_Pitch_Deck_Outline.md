@@ -1,6 +1,6 @@
-> **Render status:** this outline is updated to Run 4. The existing PPTX/PDF were not regenerated in this pass; render and inspect them before submission.
+> **Status:** Historical nine-slide draft outline only. The old binary renders were removed because they were not regenerated from the current submission pack. This outline is not guaranteed to match the final deck.
 
-# Klarrow - 9-slide pitch deck outline
+# Klarrow - Historical 9-slide pitch deck outline
 
 This outline corresponds to `RecallGraph_Pitch_Deck.pptx`. It is a draft to adapt to the official competition form and time limit once confirmed.
 

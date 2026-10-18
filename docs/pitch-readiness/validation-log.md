@@ -1,56 +1,61 @@
-# Klarrow - Validation Log
+# Klarrow — Validation Log
 
-**Date:** 2026-10-18
-**Scope:** Run 4 cycle. This is an engineering verification log, not independent validation.
+**Date:** 2026-10-18  
+**Scope:** Run 4 engineering verification and XLSX export closeout  
+**Status:** Internal engineering record; not independent validation, certification, compliance evidence, or production-readiness evidence.
 
-## Environment
+## Environment and scope
 
-- Repository: `D:\code randoms\Recall`
-- Run root: `D:\code randoms\Recall-local\run4`
-- .NET SDK: 10.0.x
-- Frontend: React/TypeScript/Vite
-- Local model: Ollama `llama3.2:3b` at `http://127.0.0.1:11434/v1`
-- Database: isolated SQLite under `D:\code randoms\Recall-local\run4\data`
-- Repository history: no commits; working tree is untracked. No commit or push was performed.
+- Repository: `Just4Skii/Klarrow`, branch `main`.
+- Backend: .NET 10 / ASP.NET Core with EF Core and SQLite.
+- Frontend: React, TypeScript, Vite.
+- Model: local Ollama `llama3.2:3b`.
+- Run 4 data: isolated SQLite root and seven authored fictional source documents.
+- This is not a fresh-clone build performed by this log’s author. The results below are the recorded engineering checks from the Run 4 and export-closeout sessions.
 
-## Commands and results
+## Recorded checks
 
-| Check | Command | Result | Status |
-|---|---|---|---|
-| .NET baseline | `dotnet test D:\code randoms\Recall\RecallGraph.slnx --nologo --verbosity minimal` | 38 passed / 0 failed | PASS |
-| .NET after changes | same | 40 passed / 0 failed, 11 s | PASS |
-| Grounding targeted | `dotnet test ... --filter "FullyQualifiedName~Grounding"` | 3 passed / 0 failed | PASS |
-| Selected tests | grounding + gap + investigation + dedup filters | 6 passed / 0 failed | PASS |
-| Frontend lint | `npm run lint` | 0 errors, 2 pre-existing fast-refresh warnings | PASS |
-| Frontend production build | `npm run build` | `tsc -b` and Vite build passed | PASS |
-| Playwright full suite | `npx playwright test --reporter=line` | 25 passed / 25 total, 45.4 s | PASS |
-| Llama smoke | `POST /api/extraction/smoke` | `success=true`, `llama3.2:3b`, 1 fact | PASS |
-| Run 4 extraction | `POST /api/extraction/run` | 7 docs, 15 AI facts, 57.9 s wall-clock | PASS (functional) |
-| Run 4 trace | `POST /api/trace-runs` | FL-1021A, Bosveld, Highveld; possible empty; 77 ms | PASS (functional) |
-| Export JSON | `GET /api/trace-runs/{id}/export?format=json` | valid JSON, 32 top-level keys, 38 audit rows | PASS |
-| Export CSV | `GET ...format=csv` | UTF-8 BOM, 52 rows, `"180.0"`, no `"180,0"` | PASS |
-| Export HTML | `GET ...format=html` | pilot workspace notice present | PASS |
-| Dependency audit | `dotnet list ... package --vulnerable --include-transitive` | high-severity advisories remain | OPEN |
-| Competition page | direct fetch of `https://events.atmeta.com/aiacademysouthafrica` | official page confirms 20 Oct 2026 deadline and eligibility; rubric unpublished | PASS (partial) |
-| Pitch deck | PowerPoint COM save/export | 10 slides; 176 animation effects; PDF 10 pages | PASS |
-| One-pager | PowerPoint COM export | 1 page; visually checked | PASS |
-| Visual QA | all 10 final slide PNGs and one-pager PNG opened | no clipping/overlap after fixes | PASS |
+| Check | Recorded result | Status / limitation |
+|---|---|---|
+| Full .NET test suite | 40 passed, 0 failed | Pass in the recorded local run |
+| Targeted XLSX test | 1 passed, 0 failed | Separate targeted check |
+| Frontend lint | 0 errors; 2 pre-existing fast-refresh warnings | Pass with warnings |
+| Frontend production build | TypeScript and Vite build passed | Pass |
+| Playwright suite | 25 passed, 0 failed | Passed before the XLSX-specific closeout |
+| Local Llama smoke test | `success=true`; `llama3.2:3b`; one fact returned | Functional smoke test only |
+| Run 4 extraction | Seven documents; 15 AI facts; 57.9 seconds wall-clock | Functional run, not accuracy evidence |
+| Run 4 trace | `FL-1021A`, Bosveld Tuckshop Distributors, Highveld Retail Group; possible scope empty; 77 ms | One authored scenario |
+| JSON export | Valid JSON; 32 top-level keys; 38 audit rows | Pass in recorded check |
+| CSV export | UTF-8 BOM; 52 rows; invariant decimal `180.0` | Pass in recorded check |
+| HTML export | Pilot-workspace provenance notice present | Pass in recorded check |
+| XLSX export | Five worksheets; tables; frozen headers; wrapped cells; print setup | Pass in recorded closeout |
+| Browser download / print check | XLSX download 30,664 bytes; 14 printed pages without clipping after row-height fix; HTML print 5 pages | Local browser validation, not an independent cross-platform Excel test |
+| GitHub Actions | CI workflow added during repository cleanup | Hosted run is pending; do not report CI as passing until GitHub confirms it |
 
 ## Run 4 observed state
 
-- 50 facts: 15 AI / 35 parser.
+- Seven authored fictional documents; one local model run and one operator.
+- 50 facts: 15 AI candidate facts and 35 deterministic-parser facts.
 - AI grounding: 4 `quote_verified`, 3 `context_match_value_adjacent`, 8 `identifier_matched_quote_unverified`, 0 `needs_review_unverified_source`.
-- Review: 7 AI + 7 parser facts reviewed; final 14 Confirmed / 36 Unreviewed.
-- Relationships: 8 proposals; 7 confirmed, 1 rejected; alias deferred; 0 aliases confirmed.
-- Final trace: FL-1021A + Bosveld + Highveld; FL-1034C excluded; possible scope empty.
-- Mass balance: `insufficient`, 320 kg vs 6,600 units.
-- Findings: 3 open (36 unreviewed, ambiguous identifier, quantity mismatch).
-- Customer residue check: `customers_run2=0`; regression test covers cleanup and audit retention.
-- Exports: JSON/CSV/HTML checks passed.
+- Seven AI facts were reviewed; eight identifier-only AI facts were left unreviewed.
+- Final fact review: 14 confirmed / 36 unreviewed.
+- Eight relationship proposals: seven confirmed and one false-positive dispatch relationship rejected.
+- The `RM-O873` / `RM-0873` alias was deferred; no alias was confirmed.
+- Final Run 4 trace: `FL-1021A`, Bosveld Tuckshop Distributors and Highveld Retail Group (Pty) Ltd; possible scope empty; `FL-1034C` excluded from the confirmed trace.
+- Mass balance remained insufficient: 320 kg received versus 180 kg recorded consumed and 6,600 downstream units; no conversion was invented.
+- Three open findings: 36 unreviewed facts, an ambiguous identifier, and a quantity mismatch.
 
-## Notes / limitations
+## What the results do not establish
 
-- The benchmark is one authored seven-document fictional scenario, one model, one operator, n=1. It is not an accuracy, time-savings, customer-demand or real-document study.
-- The two Playwright failures in the first full run were root-caused: an upload/refresh error race and an order/state-sensitive test. After the fix, both passed in isolation and the full suite passed.
-- The dependency advisories were not patched in this pass. A broad package upgrade immediately before submission was judged higher risk than documenting the residual.
-- The binary pitch deck and PDF were not regenerated; editable markdown sources were updated.
+The benchmark is one authored fictional scenario (`n=1`). No extraction accuracy, precision/recall, false-negative rate, manual-vs-tool time savings, real-document performance, customer demand, or willingness to pay was measured. The current scenario does not isolate a unique accuracy contribution from the Llama model against a deterministic-only baseline.
+
+The separate browser E2E flow from the closeout used a fresh seven-document / 35-claim review scenario and returned five confirmed links, `FL-1021A`, two customers, and zero gaps. This is a distinct run and must not be merged with the Run 4 metrics above.
+
+## Open risks
+
+- High-severity transitive dependency advisories were reported for Microsoft.OpenApi 2.0.0, SQLitePCLRaw.lib.e_sqlite3 2.1.11, System.Security.Cryptography.Pkcs 9.0.0, and System.Security.Cryptography.Xml 9.0.0. Re-audit the current dependency graph before any deployment; do not upgrade broadly without regression testing.
+- API-key middleware is optional and leaves health, extraction-status and capabilities endpoints public when configured. No production security review has been completed.
+- OCR for scanned images, RBAC/SSO, production deployment/monitoring, real customer/practitioner validation and independent real-document evaluation are not complete.
+- The current CI workflow is new and has not yet produced a verified hosted run at the time of this edit.
+
+**Decision:** suitable for controlled prototype demonstration and competition submission, subject to rehearsing the exact submitted build. Not suitable for production or regulatory reliance.

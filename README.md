@@ -38,7 +38,7 @@ Unlike rigid ERP platforms (SAP, NetSuite) that assume all data lives in uniform
 [Reconciliation Findings] ────── Gap Detection, Mass Balance Discrepancy & Caveats
          │
          ▼
-[Immutable Audit Package] ────── Sanitized CSV & Print-Ready HTML with Provenance
+[Auditable Exports] ────────────── XLSX, JSON, CSV & HTML with Provenance
 ```
 
 ---
@@ -80,7 +80,7 @@ Double-click **`start-klarrow.cmd`** in the repository root. It starts the API a
 $env:RecallGraph__ApiKey="your-secure-random-token"
 dotnet run --project src/RecallGraph.Api --urls http://127.0.0.1:5099
 ```
-When configured, all non-health routes require the `X-Api-Key` header. The frontend securely prompts for the key and stores it in session storage only.
+When configured, application routes require the `X-Api-Key` header except `/api/health`, `/api/extraction/status`, and `/api/capabilities`. The frontend prompts for the key and stores it in session storage only. This optional guard is intended for a controlled local/demo setup; it is not a substitute for production authentication, authorization, TLS, or deployment hardening.
 
 ---
 
@@ -95,7 +95,7 @@ When configured, all non-health routes require the `X-Api-Key` header. The front
 
 ## 6. Verification & Automated Test Suite
 
-Klarrow includes a comprehensive integration test harness using temporary SQLite databases and isolated storage roots.
+Klarrow includes an integration test harness using temporary SQLite databases and isolated storage roots. A GitHub Actions workflow now runs the .NET build/tests and frontend lint/build on pushes and pull requests; the first hosted run must complete before treating CI as verified.
 
 ```powershell
 # Run the 40 automated integration tests
@@ -107,7 +107,7 @@ npm run lint
 npm run build
 ```
 
-**Test Suite Coverage (40/40 .NET tests and 25/25 Playwright tests passing):**
+**Latest recorded test results (40/40 .NET tests; 25/25 Playwright tests):**
 - Document upload -> relationship proposal generation -> operator confirmation -> confirmed trace scope.
 - Strict isolation of Candidate links from Confirmed finished lot and customer exposure.
 - Invalidation cascade demoting confirmed links when an underlying supporting fact is rejected or edited.
@@ -117,7 +117,8 @@ npm run build
 - Rejecting a false-positive relationship removes an orphaned auto-registered entity while preserving audit history.
 - Workspace open-gap count uses persisted findings, matching the Findings page.
 - Near-match typo proposals (`O` vs `0`) requiring human review without auto-merging.
-- CSV formula trigger sanitization and HTML provenance report generation.
+- CSV formula-trigger sanitization and HTML provenance report generation.
+- Five-sheet XLSX workbook export, with worksheet tables, frozen headers, wrapped evidence cells and print layout checks.
 
 ---
 

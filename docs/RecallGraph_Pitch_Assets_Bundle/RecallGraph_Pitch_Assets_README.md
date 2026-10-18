@@ -1,23 +1,13 @@
-# Klarrow pitch assets - 18 October 2026
+# Klarrow pitch source materials
 
-> **Render status (2026-10-18):** the editable markdown sources were updated to the Run 4 numbers. The existing `RecallGraph_Pitch_Deck.pptx`, `RecallGraph_Pitch_Deck.pdf` and `RecallGraph_Pitch_One_Pager.pdf` were **not regenerated or visually re-inspected** in this pass. Render them from the updated sources before submission; do not present them as current until that is done.
+This directory retains editable Markdown sources for the pitch script, one-pager and a historical nine-slide outline.
 
+## Binary render status
 
-## Included
-- `RecallGraph_Pitch_Deck.pptx` - editable 9-slide pitch deck with speaker notes.
-- `RecallGraph_Pitch_Deck.pdf` - PDF rendering of the deck for quick review/sharing.
-- `RecallGraph_Pitch_One_Pager.pdf` - single-page visual overview.
-- `RecallGraph_Pitch_One_Pager.md` - editable source copy for the one-pager.
-- `RecallGraph_Pitch_Deck_Outline.md` - slide-by-slide summary.
-- `RecallGraph_5_Minute_Pitch_Script.md` - timed narration notes.
+The older PowerPoint/PDF renders and duplicate ZIP copies were removed during repository cleanup because they had not been regenerated from the current submission materials. Do not treat the historical outline as an exact description of the final submission deck. Generate and inspect fresh presentation files from the authoritative submission pack before presenting or submitting them.
 
 ## Evidence discipline
-The materials use the Run 4 evidence: seven authored fictional documents; 15 Llama candidate facts plus 35 parser facts; 4 value-in-quote verified, 3 adjacent-line context, 8 identifier-only claims flagged; 8 relationship proposals with 7 confirmed and 1 rejected; 14 facts confirmed / 36 still unreviewed; final trace to FL-1021A and customers Bosveld and Highveld; and insufficient mass balance (320 kg received vs 180 kg recorded consumed plus 6,600 downstream units).
 
-The deck explicitly states that 8 identified facts were identifier-only and not counted as grounded, that 36 facts remained unreviewed after the run, and that the case is authored fiction. It does not claim customer validation, extraction accuracy, manual time savings, ERP integration, compliance or certification.
+The editable sources describe Run 4 as one controlled scenario using seven authored fictional documents and local `llama3.2:3b`. The run produced 15 AI candidate facts and 35 parser facts; 4 AI facts were value-in-quote verified, 3 were adjacent-line context matches, and 8 were identifier-only and left unreviewed. Seven of eight relationship proposals were confirmed and one false-positive dispatch relationship was rejected. Fourteen facts were confirmed and 36 remained unreviewed. The `RM-O873` / `RM-0873` alias was deferred. Mass balance remained insufficient.
 
-## Before submission
-- Confirm the exact competition's current official eligibility, deadline, judging criteria and required pitch format; these materials are not tailored to a verified official rubric.
-- Run a fresh application dry-run with the exact intended demo root and real Ollama model. Regenerate the PPTX/PDF from the updated markdown outline if a rendered deck is required.
-- Verify licence terms for the exact Llama model and competition requirements.
-- Replace no benchmark numbers unless the new measurements and artifacts are preserved and checked.
+Do not claim extraction accuracy, time saved, customer validation, compliance, certification, ERP integration, or production readiness on the basis of this benchmark.
