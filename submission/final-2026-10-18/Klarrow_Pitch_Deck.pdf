@@ -1,0 +1,191 @@
+      Klarrow                                                                         Human review. Source grounding. Explicit uncertainty.
+
+                   Evidence-reconciliation workbench
+
+AI ACADEMY SOUTH AFRICA · PITCHATHON
+
+Evidence reconciliation
+for food-traceability
+investigations
+
+Klarrow helps an operator assemble and challenge fragmented supplier, production and
+dispatch records - with source grounding, human decisions and explicit uncertainty.
+
+Prototype demonstration · 18 October 2026 · Run 4 controlled synthetic scenario
+THE INVESTIGATION MOMENT
+
+A supplier alert starts a document hunt,
+
+not a clean database query.
+
+                                                                                            RECORDS ARRIVE IN DIFFERENT SHAPES
+
+01 Which batches used the lot?                                                              PDF                                 CSV       XLSX
+
+           Production sheets, batch records and stock ledgers rarely share one identifier.
+
+02 Which customers received them?                                                                LOG                                 EML
+
+           Dispatch notes and invoices sit across warehouses, carriers and spreadsheets.    same lot, different identifiers
+                                                                                            kg vs units
+03 Where does the evidence stop lining up?                                                  missing pages · near-match codes
+
+           Quantities disagree; records are missing; typos look like real lot codes.
+
+The operator must assemble, challenge and document the evidence trail. Klarrow is designed for that moment - not to decide food safety.
+
+Klarrow · evidence-reconciliation workbench                                                                                                     02
+THE WORKBENCH
+
+One workbench: ingest, ground, review, trace, export.
+
+1 Ingest                                     › 2 Extract  › 3 Ground  › 4 Review  › 5 Trace & export
+
+                                                                      SUPPORTED INPUTS
+
+                                                                      Text · CSV/TSV · Excel · EML · logs · text-selectable
+                                                                      PDF
+
+                                                                      HONEST BOUNDARY
+
+                                                                      Images and scanned PDFs are retained but not OCR'd.
+                                                                      The prototype does not read handwriting or
+                                                                      photographs.
+
+                                                                      Klarrow sits beside the system of record. It does not
+                                                                      replace the ERP.
+
+Klarrow · evidence-reconciliation workbench                                                                                  03
+THE AI ROLE
+
+Meta Llama proposes candidate facts.
+Deterministic code and people decide.
+
+                                                                                                                                                                     LOCAL META LLAMA 3.2 3B
+
+                                                                                                                                                                     Candidate fact extraction from supported text. No cloud model call
+                                                                                                                                                                     in this run.
+
+                                                                                                                                                                     DETERMINISTIC PARSERS
+
+                                                                                                                                                                     Structured rows, lots, quantities and trace-link proposals. Graph
+                                                                                                                                                                     traversal is code, not the model.
+
+                                                                                                                                                                     HUMAN REVIEWER
+
+                                                                                                                                                                     Confirms, rejects or edits with a reason. Every decision is written to
+                                                                                                                                                                     the audit trail.
+
+15       35           4                                                                                                                                              3                 8
+
+AI rows  parser rows  value-in-quote                                                                                                                                 adjacent context  identifier-only
+
+Run 4 · one authored seven-document scenario · 15 AI rows contain duplicate values; this is not 15 unique discoveries. No unique AI-only raw token was established.                                                                    04
+Klarrow · evidence-reconciliation workbench
+THE HUMAN GATE
+
+A relationship is not confirmed just because
+a model proposed it.
+
+                                                                                                                          RUN 4 REVIEW OUTCOME
+
+                                                                                                                          • 8 relationship proposals.
+                                                                                                                          • 7 confirmed by the operator; 1 rejected.
+                                                                                                                          • The rejected link is a false-positive dispatch phrase: "Run 2
+                                                                                                                          output: PB-2026-1013-B".
+                                                                                                                          • RM-O873 / RM-0873 alias deferred, not silently merged.
+                                                                                                                          • Supporting facts reviewed for confirmed links; 36 facts
+                                                                                                                          remain unreviewed.
+
+The false positive is a feature of the demo, not a hidden failure: the gate caught it before it entered confirmed scope.  Confirmation records a human decision. It is not
+                                                                                                                          independent proof of truth.
+Klarrow · evidence-reconciliation workbench
+                                                                                                                                                                                                                                  05
+THE TRACE                                    RUN 4 SNAPSHOT
+                                             Confirmed
+The trace separates confirmed scope
+from possible exposure.                      FL-1021A → Bosveld + Highveld
+
+Klarrow · evidence-reconciliation workbench  Outside this trace
+                                             FL-1034C stays outside the RM-0873 trace while the RM-
+                                             O873 alias is deferred.
+
+                                             Possible scope
+                                             Empty in this snapshot.
+                                             Mass balance
+                                             Insufficient: 320 kg input vs 6,600 units output. No
+                                             conversion invented.
+                                             3 open findings
+
+                                             Not a recall decision.
+
+                                                                                                                                             06
+THE EVIDENCE BOUNDARY
+
+What this run supports - and what it does not.
+
+OBSERVED                                                             NOT ESTABLISHED
+
+• End-to-end workflow on one authored scenario.                      • General accuracy, precision or recall.
+• Local Llama candidate facts; deterministic parsing and traversal.  • Time saved vs manual work.
+• Four grounding states, including adjacent-line context.            • Unique AI-only raw facts.
+• Human rejection of one false-positive relationship.                • Real customer data, demand or pilots.
+• Deferred alias; confirmed vs possible scope; export.               • Production readiness, OCR or certification.
+
+                                             One authored scenario · one local model · one operator · n=1
+
+                                                                    We are deliberately showing the boundary, not hiding it.
+
+Klarrow · evidence-reconciliation workbench                                                                                   07
+SOUTH AFRICAN CONTEXT
+
+Why this matters in South Africa.
+
+Producer responsibility                                     Export traceability                                                 Regulator can require action
+
+Food safety and accurate labelling rest with the producer.  PPECB food-safety audits explicitly cover traceability for          The NCC may require a producer to conduct an
+Enforcement is delegated to municipal health services.      regulated agricultural products intended for export.                investigation or carry out a recall programme on its
+                                                                                                                                terms.
+
+National Department of Health, Food Control                 PPECB, Food Safety Services                                         Consumer Protection Act 68 of 2008, s60
+
+The implication: one event may need an evidence pack for several audiences. We are testing whether an evidence-reconciliation overlay helps - not claiming
+that demand is proven.
+
+Sources: health.gov.za/food-control-home · ppecb.com/services/food-safety-services · gov.za Consumer Protection Act 68 of 2008
+
+Klarrow · evidence-reconciliation workbench                                                                                                                                           08
+THE ASK
+
+Next: a practitioner-led, authorised
+mock-recall evaluation.
+
+WEEK 1                                       WEEK 2                                        WEEK 3                                       WEEK 4
+
+Practitioner review                          Records                                       Timed tabletop                               Validation memo
+
+15-minute walkthrough of the synthetic       Authorised or redacted records that resemble  Manual baseline vs Klarrow-assisted pass on  What helped, what failed, what must change
+scenario.                                    the real workflow.                            equivalent evidence.                         before a pilot.
+
+MEASURE  Time to assemble the evidence pack · missed or ambiguous links · human review load · unresolved gaps · auditability
+
+Draft plan, not a committed pilot. No customer has been contacted or committed.
+
+We are asking for: a 15-minute review, authorised/redacted records, and one supervised tabletop.
+
+Klarrow · evidence-reconciliation workbench                                                                                             09
+      Klarrow
+
+                   Evidence-reconciliation workbench
+
+Evidence before assertion.
+
+Klarrow helps an operator assemble, challenge and document the evidence trail for a food-traceability investigation -
+with human decisions, source grounding and explicit uncertainty.
+
+Seeking practitioner review and authorised or redacted records.
+
+Not a recall decision system. Not certified. Not production-ready.
+
+Run 4 · one authored synthetic scenario · 18 October 2026
+
