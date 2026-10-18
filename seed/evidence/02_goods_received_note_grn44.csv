@@ -1,0 +1,3 @@
+document_ref,date,supplier,raw_lot,description,received_qty,unit,warehouse,checked_by
+GRN-0044,2026-09-10,Northern Wheat Supplies,RM-0427,Wheat flour fine,1200,kg,Ambient store A,QC-03
+GRN-0045,2026-09-03,Northern Wheat Supplies,RM-0399,Wheat flour fine,900,kg,Ambient store A,QC-02

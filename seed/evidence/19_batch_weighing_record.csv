@@ -1,0 +1,3 @@
+date,batch,ingredient,lot,target_kg,actual_kg,difference,operator
+2026-09-12,PB-2026-0912-A,wheat flour,RM-0427,975,980,5,S. Khumalo
+2026-09-12,PB-2026-0912-A,oat flour,OA-777,210,208,-2,S. Khumalo

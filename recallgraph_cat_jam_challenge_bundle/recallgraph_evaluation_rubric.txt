@@ -1,0 +1,63 @@
+RECALLGRAPH — PORTFOLIO / PITCHATHON EVALUATION RUBRIC (100 POINTS)
+
+Score only observable code, working behavior, test output, and documented evidence. Do not give credit for self-reported claims without proof.
+
+A. Real working end-to-end workflow — 20 points
+- Starts from documented clean setup (4)
+- Imports/loads seeded evidence and selects a lot (4)
+- Runs forward and backward trace with useful output (6)
+- Allows review of claims and exports the evidence-backed report (6)
+
+B. Trace correctness and uncertainty — 20 points
+- Deterministic traversal over relationships, not LLM-invented graph (5)
+- Correct result versus independent ground truth (5)
+- Near-matches never silently promoted to confirmed links (3)
+- Missing evidence, conflicting records and quantity mismatch are explicit (4)
+- Mass balance never reports success with unknown inputs or unresolved discrepancy (3)
+
+C. Provenance and auditability — 15 points
+- Each displayed claim links to a source document and page/row where available (5)
+- Human confirmation/edit/rejection recorded with timestamp (4)
+- Trace run result snapshot and audit events persist (3)
+- Export preserves sources, confidence state and disclaimer (3)
+
+D. Meaningful Meta Llama integration — 15 points
+- Genuine configurable Llama provider, no hard-coded credentials (4)
+- Constrained schema and server-side validation (4)
+- Provider errors, malformed output, timeouts and missing config handled (3)
+- Extraction runs distinguish real Llama inference from fixture/demo mode (2)
+- AI adds practical value beyond deterministic parsing (2)
+
+E. Product quality and usability — 10 points
+- Credible, coherent operations UI (3)
+- Import, evidence review, trace and export controls actually work (3)
+- Clear errors, partial states and responsive/accessibility basics (2)
+- Useful demo and realistic fixtures (2)
+
+F. Tests, maintainability and reliability — 15 points
+- Automated unit/API tests cover critical trace and gap cases (5)
+- Frontend/e2e core workflow test attempted and result reported (3)
+- Useful modular architecture; no giant monolith / unexplained code duplication (2)
+- No critical runtime errors in tested flow (2)
+- Clean source control, no secrets, setup docs reproducible (3)
+
+G. Honesty and portfolio readiness — 5 points
+- Clearly separates implemented, tested, assumed and unvalidated claims (2)
+- Documents competitor context and limitations; no unsupported claims of market whitespace (1)
+- README, screenshots and runnable demo instructions (2)
+
+INTERPRETATION
+90–100: Exceptional prototype; still requires real user validation before production claims.
+80–89: Strong portfolio-grade MVP; some gaps remain.
+65–79: Promising but has core weaknesses to repair before public pinning.
+45–64: Mostly demo scaffolding; significant functionality or correctness gaps.
+Below 45: Not a credible working MVP.
+
+AUTOMATIC RED FLAGS
+- An app claiming Llama integration when it only returns fixture responses.
+- Trace relationships invented or silently auto-confirmed by the LLM.
+- Missing records treated as evidence that no affected customer exists.
+- A green mass-balance status despite missing quantities.
+- “4x faster” or any performance claim without measured baseline.
+- Claims of BRCGS/GLOBALG.A.P. compliance or readiness without proper scope and validation.
+- Dead UI controls, fake progress, hard-coded demo outputs presented as computed results, or unsupported test claims.

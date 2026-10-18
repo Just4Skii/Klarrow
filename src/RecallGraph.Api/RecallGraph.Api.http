@@ -1,0 +1,6 @@
+@RecallGraph.Api_HostAddress = http://localhost:5100
+
+GET {{RecallGraph.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

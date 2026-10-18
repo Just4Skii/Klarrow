@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RecallGraph.Api/RecallGraph.Api.csproj" />
+    <Project Path="src/RecallGraph.Application/RecallGraph.Application.csproj" />
+    <Project Path="src/RecallGraph.Infrastructure/RecallGraph.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RecallGraph.Tests/RecallGraph.Tests.csproj" />
+  </Folder>
+</Solution>

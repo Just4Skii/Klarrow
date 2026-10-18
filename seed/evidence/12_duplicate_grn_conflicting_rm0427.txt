@@ -1,0 +1,9 @@
+DUPLICATE GOODS-RECEIVED RECORD (conflicting copy)
+Source: scan from store office
+GRN-0044 (copy)
+Date: 10/09/2026
+Supplier shorthand: N W Supplies
+Lot (as scanned): RM-O427
+Received qty: 1,195 kg
+Checker signature unreadable (ink bleed)
+Note: conflicting quantity versus primary record (1,200 kg). Original store ledger kept separately.

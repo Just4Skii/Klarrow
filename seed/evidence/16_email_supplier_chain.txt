@@ -1,0 +1,11 @@
+EMAIL THREAD (exported)
+From: qc@savannabites.co.za
+To: supplier-quality@northernwheat.example
+Date: 2026-09-16
+Subject: RM-0427 / FL-0514 mock recall practice
+Body:
+We are running a mock recall practice scenario, not an operational event.
+Please confirm supplier lot number and delivery references for the 10 Sep 2026 delivery (DN-77821).
+Affected production batch PB-2026-0912-A and finished lots FL-0514, FL-0515 are being traced.
+FL-0516 is intended to be a decoy lot from RM-0399.
+Missing dispatch page for FL-0515 remains unresolved.

@@ -1,0 +1,6 @@
+COLD ROOM / AMBIENT STORAGE LOG
+Date range: 2026-09-09 to 2026-09-16
+Area: Ambient store A
+Temperature min 18 C max 24 C.
+RM-0427 stored on rack 3; no excursion recorded.
+Note: storage location helps but does not prove chain of custody.

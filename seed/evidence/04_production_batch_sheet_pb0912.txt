@@ -1,0 +1,13 @@
+SAVANNA BITES (PTY) LTD - PRODUCTION BATCH SHEET
+Batch code: PB-2026-0912-A
+Production date: 12/09/2026
+Line: Bakery Line 1
+Product: Cheddar oat snack (120 g)
+RM input: RM-0427, 975 kg
+Other ingredients: oat flour 210 kg, seasoning blend 35 kg, oil 28 kg
+Total input: 1248 kg
+Output: 2400 units finished (120 g)
+Waste/trim: 12 kg
+Supervisor: J. Naidoo
+Quality hold: no
+Note: quantity entered as 975 kg; dispatch rights are in kg but finished in units.

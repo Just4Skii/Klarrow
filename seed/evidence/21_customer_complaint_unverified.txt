@@ -1,0 +1,6 @@
+CUSTOMER COMPLAINT (UNVERIFIED)
+Date reported: 2026-09-18
+Customer: anonymous via phone
+Claim: odd taste in cheddar snack from lot possibly FL-0514
+No packaging returned; no lot confirmed
+Status: unverified; not used as evidence in seeded graph.

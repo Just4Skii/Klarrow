@@ -1,0 +1,10 @@
+CONTROLLED REWORK ENTRY
+Entry no: R-07
+Date: 2026-09-13
+Source batch: PB-2026-0912-A
+Material moved: 40 kg off-spec dough containing RM-0427
+Destination batch: PB-2026-0913-R
+Authorised by: QA manager
+Finished output: FL-0515, 1500 units
+Reason: dimensional out-of-spec; material suitable for rework
+Change control: REWORK-07, cross-ref stock ledger.

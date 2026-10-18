@@ -1,0 +1,14 @@
+RecallGraph — Cat Jam challenge pack
+
+Files:
+- recallgraph_cat_jam_build_prompt.txt: full implementation brief to give Cat Jam.
+- recallgraph_evaluation_rubric.txt: independent scoring rubric.
+
+Recommended run:
+1. Create a clean directory/repository for this project in OpenCode.
+2. Give Cat Jam the full build prompt first. Keep the rubric separate until it claims completion if you want to reduce rubric-gaming; otherwise use it to guide implementation quality.
+3. Require it to implement the project in the actual workspace, not merely output a plan.
+4. After it finishes, run the README commands from a fresh terminal and score it using the rubric.
+5. For a Pitchathon prototype, use synthetic data until a real business explicitly authorizes use of its records. Never send confidential real supplier documents to a remote Llama endpoint without clear notice and authorization.
+
+Important: this is a product hypothesis and engineering test, not evidence that there is a verified market gap. Do customer discovery before presenting commercial demand as established.

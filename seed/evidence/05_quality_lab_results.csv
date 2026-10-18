@@ -1,0 +1,4 @@
+sample_id,date,lot,test,result,status,analyst
+QC-441,2026-09-11,RM-0427,Vomitoxin screening,below method reporting limit,pass,Lab Naledi
+QC-442,2026-09-12,FL-0514,Microbial screen,not yet available,pending,Lab Naledi
+QC-443,2026-09-13,RM-0399,Vomitoxin screening,not detected,pass,Lab Naledi

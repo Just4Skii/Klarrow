@@ -1,0 +1,8 @@
+PRODUCTION BATCH SHEET
+Batch code: PB-2026-0905-A
+Production date: 2026-09-05
+Raw material: RM-0399, 700 kg
+Product: Cheddar oat snack 120g
+Output: 1800 units
+Waste: 8 kg
+Line: Bakery Line 1

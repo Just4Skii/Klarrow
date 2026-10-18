@@ -1,0 +1,10 @@
+{
+  "scenario": "Fictional South African snack producer",
+  "suspectRawLot": "RM-0427",
+  "affectedFinishedLots": ["FL-0514", "FL-0515"],
+  "unaffectedFinishedLots": ["FL-0516"],
+  "knownDestinations": ["Tuckshop Arendse (Benoni)", "Groot Pretoria Foods (Pty) Ltd", "Cafe Kapabela"],
+  "nearMatchAliases": ["RM-O427"],
+  "missingDispatchQuantity": 500,
+  "massBalanceExpectedStatus": "not-reconciled"
+}

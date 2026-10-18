@@ -1,0 +1,244 @@
+{
+  "report": "Klarrow Run 4 benchmark (single-scenario live-inference)",
+  "runDate": "2026-10-18",
+  "timezoneNote": "DB timestamps are UTC; local SAST = UTC+2",
+  "supersedes": {
+    "run": "Run 3",
+    "runDate": "2026-10-17",
+    "note": "Run 4 supersedes all Run 3 headline numbers. Old Run 3 numbers are not directly comparable because the grounding taxonomy changed, Run 4 is a new live LLM sample (15 AI facts versus 13), and Run 4 includes fact-level review. The full Run 3 report is preserved verbatim in docs/benchmark-run3.md Appendix A.",
+    "filenameNote": "This file keeps the historical name run3-results.json for compatibility. Its primary payload is now the Run 4 result; the historical Run 3 summary is retained in historicalRun3."
+  },
+  "environment": {
+    "runRoot": "D:\\code randoms\\Recall-local\\run4",
+    "workspaceId": "3eea195d-a7df-437d-9642-e9148a554fbe",
+    "investigation": {
+      "id": "872650af-899f-437f-81f7-b74be2ad65b4",
+      "reference": "INV-RUN4-8873",
+      "name": "Supplier alert CS-CIN-0915 - cinnamon lead (Run 4)"
+    },
+    "aiProvider": {
+      "provider": "OpenAI-compatible Llama",
+      "modelId": "llama3.2:3b",
+      "isDemo": false,
+      "independentProviderAudit": false
+    },
+    "extractionRun": {
+      "id": "b4b095ba-2dcb-453e-a3fb-045699138f82",
+      "status": "completed",
+      "documentCount": 7,
+      "factsCreated": 15
+    },
+    "finalTraceRunId": "b88a5916-59fa-4e03-aa45-880bae68112f"
+  },
+  "dataset": {
+    "provenance": "author-authored fictional scenario documents; NOT real customer data; same 7 file names and parser counts as Run 3",
+    "note": "SHA-256 hashes were not re-verified in Run 4. Dataset identity rests on the same file names and matching parser fact counts.",
+    "documents": [
+      { "fileName": "01_supplier_recall_alert_2026-10-02.txt", "parserFacts": 12, "aiFacts": 2 },
+      { "fileName": "02_goods_received_note_GRN-77412.txt", "parserFacts": 3, "aiFacts": 1 },
+      { "fileName": "03_cinnamon_stock_ledger_sep_2026.csv", "parserFacts": 5, "aiFacts": 5 },
+      { "fileName": "04_batch_sheet_PB-2026-1012-A.txt", "parserFacts": 5, "aiFacts": 1 },
+      { "fileName": "05_production_log_PB-2026-1013-B.txt", "parserFacts": 4, "aiFacts": 2 },
+      { "fileName": "06_dispatch_note_DSP-5011.txt", "parserFacts": 3, "aiFacts": 3 },
+      { "fileName": "07_dispatch_note_DSP-5012.txt", "parserFacts": 3, "aiFacts": 1 }
+    ],
+    "totals": {
+      "documents": 7,
+      "parserFacts": 35,
+      "aiFacts": 15,
+      "totalFacts": 50
+    }
+  },
+  "grounding": {
+    "taxonomyNote": "Run 4 separates quote_verified from context_match_value_adjacent. quote_verified requires the raw value to appear inside the quoted span. context_match_value_adjacent means the quote is located but the value is on an adjacent line. This is stricter than Run 3, which counted adjacent-value cases as quote_verified. Do not compare the Run 4 quote_verified count directly with Run 3.",
+    "aiValidationOutcomes": {
+      "quote_verified": 4,
+      "context_match_value_adjacent": 3,
+      "identifier_matched_quote_unverified": 8,
+      "needs_review_unverified_source": 0
+    },
+    "reviewedAiFacts": {
+      "total": 7,
+      "quoteVerified": 4,
+      "contextMatchValueAdjacent": 3,
+      "reviewer": "operator"
+    },
+    "unreviewedAiFacts": 8,
+    "facts": [
+      { "id": "810a8e17", "document": "07_dispatch_note_DSP-5012.txt", "location": "lines 2-3", "outcome": "context_match_value_adjacent", "rawValue": "DSP-5012", "reviewStatus": "Confirmed" },
+      { "id": "4a3d13a8", "document": "06_dispatch_note_DSP-5011.txt", "location": "line 3", "outcome": "identifier_matched_quote_unverified", "rawValue": "to follow", "reviewStatus": "Unreviewed" },
+      { "id": "b2391d66", "document": "06_dispatch_note_DSP-5011.txt", "location": "line 3", "outcome": "identifier_matched_quote_unverified", "rawValue": "two pallets shrink-wrapped and sealed", "reviewStatus": "Unreviewed" },
+      { "id": "f43cf062", "document": "06_dispatch_note_DSP-5011.txt", "location": "line 2", "outcome": "identifier_matched_quote_unverified", "rawValue": "DSP-5011", "reviewStatus": "Unreviewed" },
+      { "id": "02e35419", "document": "05_production_log_PB-2026-1013-B.txt", "location": "line 3", "outcome": "quote_verified", "rawValue": "PB-2026-1013-B", "reviewStatus": "Confirmed" },
+      { "id": "446f7485", "document": "05_production_log_PB-2026-1013-B.txt", "location": "line 2", "outcome": "quote_verified", "rawValue": "PB-2026-1013-B", "reviewStatus": "Confirmed" },
+      { "id": "0dbc00bc", "document": "04_batch_sheet_PB-2026-1012-A.txt", "location": "lines 2-3", "outcome": "context_match_value_adjacent", "rawValue": "PB-2026-1012-A | 2026-09-25 | Bakery Line 1 | Oat & cinnamon bites 120 g", "reviewStatus": "Confirmed" },
+      { "id": "d6d274b6", "document": "03_cinnamon_stock_ledger_sep_2026.csv", "location": "line 2", "outcome": "identifier_matched_quote_unverified", "rawValue": "RM-0873", "reviewStatus": "Unreviewed", "note": "quantity recorded as 0.0 kg; same slip seen in Run 3; not counted as verified" },
+      { "id": "4a74adc5", "document": "03_cinnamon_stock_ledger_sep_2026.csv", "location": "line 4", "outcome": "identifier_matched_quote_unverified", "rawValue": "PB-2026-1013-B", "reviewStatus": "Unreviewed" },
+      { "id": "35011e7b", "document": "03_cinnamon_stock_ledger_sep_2026.csv", "location": "line 3", "outcome": "identifier_matched_quote_unverified", "rawValue": "PB-2026-1012-A", "reviewStatus": "Unreviewed" },
+      { "id": "ad9335e9", "document": "03_cinnamon_stock_ledger_sep_2026.csv", "location": "line 4", "outcome": "identifier_matched_quote_unverified", "rawValue": "RM-O873", "reviewStatus": "Unreviewed" },
+      { "id": "956dd52d", "document": "03_cinnamon_stock_ledger_sep_2026.csv", "location": "line 2", "outcome": "identifier_matched_quote_unverified", "rawValue": "RM-0873", "reviewStatus": "Unreviewed" },
+      { "id": "f24a0be5", "document": "02_goods_received_note_GRN-77412.txt", "location": "lines 2-3", "outcome": "context_match_value_adjacent", "rawValue": "320 kg", "reviewStatus": "Confirmed" },
+      { "id": "0ade3e2a", "document": "01_supplier_recall_alert_2026-10-02.txt", "location": "line 10", "outcome": "quote_verified", "rawValue": "320 kg", "reviewStatus": "Confirmed" },
+      { "id": "45cd5d8e", "document": "01_supplier_recall_alert_2026-10-02.txt", "location": "line 8", "outcome": "quote_verified", "rawValue": "ground cinnamon, food grade", "reviewStatus": "Confirmed" }
+    ]
+  },
+  "factReview": {
+    "immediatelyAfterExtraction": { "confirmed": 0, "unreviewed": 50 },
+    "afterAiFactReviewBeforeSupportingParserReview": { "confirmed": 7, "unreviewed": 43, "source": "known check_db.py snapshot" },
+    "final": { "confirmed": 14, "unreviewed": 36, "source": "check_db.py re-run against current DB" },
+    "reviewedAiFacts": 7,
+    "reviewedParserSupportingFacts": 7,
+    "note": "All 7 distinct parser facts supporting confirmed relationships were reviewed after the relationship decisions. The 8 proposals share those 7 parser facts because the rejected false-positive proposal and the confirmed PB-2026-1013-B -> FL-1034C proposal cite the same supporting fact. All 8 final proposals report supportingFactsReviewed=true and unreviewedSupportingFactCount=0. The 36 unreviewed facts are 8 AI identifier-only facts plus 28 parser facts."
+  },
+  "relationshipProposals": {
+    "generation1": {
+      "generatedCount": 8,
+      "existingCount": 9,
+      "existingLinkCount": 4,
+      "existingFactKeyHitCount": 9,
+      "skippedUngroundedCount": 0
+    },
+    "countSemantics": "existingCount is retained as a legacy compatibility field and remains the number of fact-to-candidate-key hits, not distinct links. existingLinkCount is the distinct existing link count. existingFactKeyHitCount is the explicit new name for the legacy value.",
+    "uniqueLinksCreated": 8,
+    "confirmed": 7,
+    "rejected": 1,
+    "deferredRelationshipLinks": 0,
+    "unresolvedCandidates": 0,
+    "allProposalsSupportingFactsReviewed": true,
+    "totalUnreviewedSupportingFacts": 0,
+    "customersRun2": 0,
+    "customersRun2Note": "The phantom customer row seen in Run 3 was not present at Run 4 check time. This is an observation, not proof of a fix.",
+    "links": [
+      { "id": "f2b819b4", "from": "Kandy Highland Spice Mill (Pvt) Ltd", "to": "RM-0873", "linkKind": "supplier_delivery", "quantity": 320.0, "unit": "kg", "state": "Confirmed" },
+      { "id": "f8a04328", "from": "RM-0873", "to": "PB-2026-1012-A", "linkKind": "raw_to_batch", "quantity": 180.0, "unit": "kg", "state": "Confirmed" },
+      { "id": "c9f2d91a", "from": "PB-2026-1012-A", "to": "FL-1021A", "linkKind": "batch_to_finished", "quantity": 3600.0, "unit": "units", "state": "Confirmed" },
+      { "id": "a3a40642", "from": "FL-1021A", "to": "Bosveld Tuckshop Distributors", "linkKind": "finished_to_dispatch", "quantity": 1800.0, "unit": "units", "state": "Confirmed" },
+      { "id": "5bfea71a", "from": "FL-1021A", "to": "Highveld Retail Group (Pty) Ltd", "linkKind": "finished_to_dispatch", "quantity": 1200.0, "unit": "units", "state": "Confirmed" },
+      { "id": "a70e1291", "from": "RM-O873", "to": "PB-2026-1013-B", "linkKind": "raw_to_batch", "quantity": 140.0, "unit": "kg", "state": "Confirmed" },
+      { "id": "99c42d38", "from": "PB-2026-1013-B", "to": "FL-1034C", "linkKind": "batch_to_finished", "quantity": 2800.0, "unit": "units", "state": "Confirmed" },
+      { "id": "63061c77", "from": "FL-1034C", "to": "Run 2 output: PB-2026-1013-B", "linkKind": "finished_to_dispatch", "quantity": 2800.0, "unit": "units", "state": "Rejected", "note": "false positive from the deterministic dispatch heuristic on doc 05 line 3" }
+    ]
+  },
+  "matchProposal": {
+    "id": "619abcb3-7a5e-4810-ab5c-4cd7a2fe761e",
+    "leftValue": "RM-O873",
+    "rightValue": "RM-0873",
+    "score": 0.5,
+    "scoreKind": "heuristic-not-calibrated",
+    "state": "Deferred",
+    "decidedBy": "operator",
+    "decidedAt": "2026-10-18T10:44:35.856061Z",
+    "reason": "Pending lot-identity verification against physical stock records before treating as the same lot.",
+    "confirmedAliases": 0
+  },
+  "trace": {
+    "runId": "b88a5916-59fa-4e03-aa45-880bae68112f",
+    "startedAt": "2026-10-18T10:46:12.5259637Z",
+    "completedAt": "2026-10-18T10:46:12.5305442Z",
+    "measuredDurationMs": 77,
+    "persistedTimestampSpanMs": 4.6,
+    "selectedType": "raw-lot",
+    "selectedId": "RM-0873",
+    "direction": "both",
+    "confirmedScopeEstablished": true,
+    "nodes": 6,
+    "edges": 5,
+    "stateCounts": { "Confirmed": 5, "Candidate": 0, "Inferred": 0, "Gap": 0, "Rejected": 0 },
+    "affectedFinishedLots": ["FL-1021A"],
+    "affectedCustomers": ["Bosveld Tuckshop Distributors", "Highveld Retail Group (Pty) Ltd"],
+    "possibleFinishedLots": [],
+    "possibleCustomers": [],
+    "unresolvedLots": [],
+    "fl1034cReachability": "Excluded from the RM-0873 trace: not in nodes, edges, affected or possible scope. It remains in the confirmed relationship set only through RM-O873 -> PB-2026-1013-B -> FL-1034C, which is not reachable from RM-0873 while the RM-O873 alias is deferred.",
+    "findingsCount": 3,
+    "findings": [
+      { "stableKey": "inv:872650af899f437f81f7b74be2ad65b4:unreviewed-candidates", "kind": "unreviewed-candidates", "scope": "investigation", "severity": "low", "status": "Open", "unreviewed": 36 },
+      { "stableKey": "inv:872650af899f437f81f7b74be2ad65b4:ambiguous-identifier:RM-0873:RM-O873", "kind": "ambiguous-identifier", "scope": "RM-0873", "severity": "medium", "status": "Open" },
+      { "stableKey": "inv:872650af899f437f81f7b74be2ad65b4:quantity-mismatch:RM-0873", "kind": "quantity-mismatch", "scope": "RM-0873", "severity": "high", "status": "Open", "receivedKg": 320.0, "consumedKg": 180.0 }
+    ],
+    "massBalance": {
+      "status": "insufficient",
+      "inputTotal": 320.0,
+      "inputUnit": "kg",
+      "outputTotal": 6600.0,
+      "outputUnit": "units",
+      "waste": null,
+      "limitation": "Input unit 'kg' differs from output unit 'units' without verified conversion ratio.",
+      "percentageOrRatioComputed": false
+    },
+    "auditTrailNote": "trace-result-final.json has an empty auditTrail array, while the exported JSON for the same run contains 38 audit rows. Decision evidence in this report comes from relationship-decisions.json, match-proposals.json, match-deferred.json and the export, not from the empty capture array."
+  },
+  "timings": {
+    "extractionWallSeconds": 57.9,
+    "traceMeasuredMs": 77,
+    "persistedTraceTimestampSpanMs": 4.6,
+    "note": "Use the measured wall-clock figures. Do not compare directly with Run 3's server-side timestamps (53.1 s extraction run window; 8.4 ms trace timestamp delta) because the measurement basis differs. No UI round-trip latency was instrumented in Run 4."
+  },
+  "exports": {
+    "checkedWith": "check_exports.py",
+    "files": [
+      { "path": "exports/trace-b88a5916-59fa-4e03-aa45-880bae68112f.json", "bytes": 35888, "verified": "valid JSON; 32 top-level keys; 38 audit rows" },
+      { "path": "exports/trace-b88a5916-59fa-4e03-aa45-880bae68112f.csv", "bytes": 22918, "verified": "UTF-8 BOM present; 52 rows; \"180.0\" present; no \"180,0\" comma-decimal cell" },
+      { "path": "exports/trace-b88a5916-59fa-4e03-aa45-880bae68112f.html", "bytes": 17206, "verified": "pilot workspace notice present" }
+    ]
+  },
+  "validationStatus": {
+    "note": "Internal engineering evidence only. Not independent validation.",
+    "report": "docs/pitch-readiness/implementation-and-validation-report.md",
+    "dotnetBaseline": { "passed": 38, "failed": 0, "when": "before changes" },
+    "targetedAfterChanges": { "groundingTestsPassed": 3, "selectedTestsPassed": 6 },
+    "fullSuiteAfterChanges": "pending",
+    "frontendLint": { "errors": 0, "warnings": 2 },
+    "frontendBuild": "passed",
+    "playwright": { "passed": 23, "total": 25, "failuresUnderInvestigation": 2 }
+  },
+  "limitations": [
+    "single scenario, single model (llama3.2:3b), one operator session, n=1 evidence run",
+    "documents are authored fiction, not real customer data",
+    "quote_verified is an implementation match check, not semantic truth",
+    "no accuracy percentage, precision, recall or time-saving claim is made",
+    "Run 4 is not directly comparable to Run 3 because the grounding labels, LLM sample and review workflow changed",
+    "8 identifier-only AI facts remain unreviewed; 36 facts in total remain unreviewed",
+    "the deferred RM-O873 alias deliberately narrows the RM-0873 trace",
+    "Run 4 file hashes were not re-verified",
+    "no independent validation was performed"
+  ],
+  "evidencePaths": {
+    "runRoot": "D:\\code randoms\\Recall-local\\run4",
+    "extraction": "extraction-run.json",
+    "factsBeforeReview": "facts-before-review.json",
+    "factsReviewed": "facts-reviewed.json",
+    "proposalsGeneration1": "proposals-generation1.json",
+    "relationshipDecisions": "relationship-decisions.json",
+    "relationshipProposalsFinal": "relationship-proposals-final.json",
+    "matchProposals": "match-proposals.json",
+    "matchDeferred": "match-deferred.json",
+    "traceResultFinal": "trace-result-final.json",
+    "exports": "exports/",
+    "dbCheck": "check_db.py",
+    "exportCheck": "check_exports.py",
+    "historicalRun3Report": "docs/benchmark-run3.md Appendix A"
+  },
+  "historicalRun3": {
+    "status": "superseded",
+    "runDate": "2026-10-17",
+    "note": "Historical summary only. Full archived report in docs/benchmark-run3.md Appendix A. Old numbers are not directly comparable to Run 4.",
+    "rawCounts": {
+      "totalFacts": 48,
+      "aiFacts": 13,
+      "parserFacts": 35,
+      "quoteVerified": 8,
+      "identifierMatchedQuoteUnverified": 5,
+      "factsReviewedByHuman": 0
+    },
+    "relationships": { "generated": 8, "confirmed": 7, "rejected": 1 },
+    "trace": {
+      "affectedFinishedLots": ["FL-1021A"],
+      "affectedCustomers": ["Bosveld Tuckshop Distributors", "Highveld Retail Group (Pty) Ltd"],
+      "possibleScope": [],
+      "massBalance": "insufficient; 320 kg input vs 6600 units output",
+      "findings": 3
+    },
+    "timings": { "extractionSeconds": 53.1, "tracePostConfirmationMs": 8.4, "basis": "server-side stored timestamps" }
+  }
+}

@@ -1,0 +1,62 @@
+# ── Runtime data: SQLite database, journal/WAL/SHM sidecars, uploaded and derived evidence ──
+src/RecallGraph.Api/data/
+*.db-wal
+*.db-shm
+*.db-journal
+
+# ── .NET build output ──
+bin/
+obj/
+TestResults/
+*.user
+*.suo
+
+# ── Node / frontend build output ──
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# ── Playwright results, reports, screenshots and temporary test artifacts ──
+test-results/
+playwright-report/
+blob-report/
+src/frontend/shots/
+
+# ── Logs ──
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── Local environment files and secrets ──
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.local
+
+# ── IDE and OS-generated files ──
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.vs/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# -- Additional runtime / generated artifacts --
+*.db
+*.sqlite
+*.sqlite3
+*.trx
+*.coverage
+.playwright/
+artifacts/
+__pycache__/
+*.pyc
+.venv/
+*.nupkg
+*.snupkg

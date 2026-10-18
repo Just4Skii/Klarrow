@@ -1,0 +1,8 @@
+STOCK ADJUSTMENT FORM
+Date: 2026-09-12
+Lot: RM-0427
+Physical stock count: 225 kg
+System balance before run: 225 kg expected
+Difference retained after issue: 0 kg? Wait system says open raw 225 after issue; no waste adjustment recorded
+Form owner: Stores (illegible signature)
+Notes: scanned handwriting ambiguous; left as unverified data.

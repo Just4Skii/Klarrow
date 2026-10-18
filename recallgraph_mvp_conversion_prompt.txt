@@ -1,0 +1,177 @@
+RECALLGRAPH — PROTOTYPE-TO-MVP CONVERSION MANDATE
+For DeepSeek V4.1 Flash working in the existing OpenCode workspace
+
+MISSION
+Turn the existing RecallGraph codebase into a credible, pilot-ready MVP for one small food producer to conduct an evidence-assisted mock recall using disconnected traceability records. This is an implementation task, not a proposal-writing task. Inspect the repository, modify the existing system, run it, test it, fix what fails, and leave the workspace in a reproducible state.
+
+Do not restart from scratch, replace the existing architecture without evidence, or spend the effort on another visual redesign. Preserve useful working code and the improved interface. The goal is to cross the line from a polished synthetic demo to a usable, reliable pilot product.
+
+PRODUCT PROMISE
+RecallGraph helps an operator answer:
+- Which source lots, production lots, products and destinations may be affected by a suspect lot?
+- Which connections are supported by reviewed evidence, which are only candidates or inferences, and what remains unknown?
+- Which source records support each important claim?
+- What is missing or contradictory, and what can the operator responsibly conclude?
+- Can a reviewer revisit the same investigation later and see what the system knew, what people changed, and why?
+
+The product assists an investigation. It must not make or imply autonomous food-safety, release, withdrawal, regulatory-compliance or legal decisions. Keep a clear demo/pilot disclaimer until the product has undergone real-world validation and appropriate expert review. Do not invent customer demand, regulatory approval, certifications, performance results or compliance.
+
+CURRENT REPORTED BASELINE — VERIFY IT, DO NOT ASSUME IT
+The existing app reportedly uses ASP.NET Core, EF Core with SQLite, React, TypeScript and Vite. It has Home, Evidence, Facts, Trace and Audit screens; a synthetic Savanna Bites dataset; a candidate-fact review flow; a deterministic trace engine; exports; an API capabilities endpoint; and Playwright tests. Reported previous checks were .NET build success, 8/8 xUnit tests, frontend lint/build success and 2/2 Playwright tests. A seeded scenario uses suspect raw-material lot RM-0427, expected affected lots FL-0514 and FL-0515, unaffected lot FL-0516, three known destinations and a missing-dispatch gap.
+
+These are starting claims, not ground truth. Before editing, inspect the actual code, run git status, inspect the project structure, identify existing functionality and tests, and run baseline checks where practical. Preserve all existing user work. Do not discard, reset, clean, overwrite blindly, or claim a baseline check passed unless you ran it and saw the result. If the workspace has no Git history, preserve the current state and establish a safe checkpoint only if it is practical and Git identity is configured; do not let Git setup block the product work.
+
+OPERATING RULES
+1. Work autonomously in bounded stages. Do not stop after producing a plan or a list of recommendations. Start implementing the highest-value changes.
+2. Do not rewrite working features merely to impose your preferred architecture. Inspect call paths and schemas first.
+3. Never use fake success: no hardcoded live-model outputs, mocked integrations presented as real, silent fallback from live AI to demo facts, fabricated audit events, invented test results, weakened tests, or empty handlers described as complete.
+4. Synthetic fixtures are allowed for deterministic tests and an explicitly labelled demo workspace. They must be isolated from a real pilot workspace and never be mixed in silently.
+5. Use real persistent database-backed state for workflows. Avoid in-memory-only state for any user action that should survive a restart.
+6. Keep candidate extraction separate from confirmation. Only an authorized user action may confirm, reject or edit a candidate fact.
+7. A source link must refer to the exact document and location that support that fact or relationship. Never select a citation by loose substring coincidence.
+8. Unknown, conflicting, missing or ambiguous evidence remains visible. Do not infer that a record does not exist merely because the system could not parse or find it.
+9. Prefer a small, coherent MVP over a broad collection of incomplete features. Do not add DINOv2, FAISS, SAM 2, a vector database, multi-agent orchestration or a large new service unless the existing implementation demonstrates a clear MVP need. A working core beats decorative AI breadth.
+10. When a blocker genuinely requires user input or unavailable infrastructure, isolate it, complete independent work, and report the exact blocker and reproducible next step. Do not fabricate a workaround.
+
+MVP SCOPE: THE REQUIRED END-TO-END WORKFLOW
+A. WORKSPACE AND INVESTIGATION LIFECYCLE
+- Retain the existing single-organization pilot deployment model unless the repository already has a reliable alternative. Do not build a multi-tenant SaaS platform in this pass.
+- A user can create and name an investigation, identify the suspect lot, set a short description/reference and status, return to it later, and view its previous trace runs.
+- Make the selected workspace/investigation context obvious in the UI and API.
+- Seed data must be opt-in or live in a clearly labelled demo workspace. A fresh pilot installation must not accidentally mix synthetic Savanna Bites records into customer data.
+- Persist investigations and their associated evidence, facts, review decisions, trace runs, gaps and audit events across application restarts.
+
+B. EVIDENCE INGESTION THAT WORKS ON REAL FILES
+- Inspect current parsers and backend validation before deciding supported formats. Define a precise allowlist and display it in the UI; never advertise a format the server cannot process.
+- Deliver a reliable first-pass ingestion path for the common, realistically supported formats already practical in this codebase (prioritise text-searchable PDF, CSV/XLSX and DOCX only where a real parser exists). Do not pretend scanned images or unsupported files were parsed. If OCR is not implemented and tested, explicitly mark scanned/image-only files as unsupported or requiring manual transcription rather than producing fabricated text.
+- Validate size, extension and actual file content where feasible; generate server-side storage names; prevent path traversal and unsafe file access; provide useful per-file validation and parsing errors.
+- Persist file metadata, cryptographic checksum, original filename as display metadata, import time, processing status and parser/version information. Detect duplicate uploads by checksum and ask the operator how to handle them rather than duplicating silently.
+- Extract text and keep location information to the extent each format supports it: PDF page, spreadsheet sheet/row/cell, DOCX paragraph/section, or CSV row/column. If exact location data cannot be preserved, state the limitation.
+- The evidence list must show processing state, format, import time, failure reason where applicable and duplicate status. Import errors must not take down the application.
+- Never log full document contents, model API keys or sensitive extracted records by default.
+
+C. FACT EXTRACTION, PROVENANCE AND HUMAN REVIEW
+- Every candidate fact should have a stable ID; fact type; extracted value; normalized value where applicable; source document; exact available source location; evidence quotation/snippet; extraction method (manual, deterministic parser, live model or demo fixture); creation time; confidence only if the source method actually supplies a meaningful score; review status; and review history.
+- Support reviewing, confirming, rejecting and editing candidate facts. Persist reviewer identity where authentication is implemented, timestamp, previous/new values and an optional reason. Do not erase original extracted values when a reviewer edits a normalized value.
+- Make it easy to open the source beside the extracted fact. Clearly distinguish original evidence, normalized interpretation, AI suggestion and human-confirmed fact.
+- Validate model output against a schema and reject malformed or unsupported output safely. A fact that cannot be grounded in the uploaded source must not be accepted as source-backed.
+- Treat document content as untrusted data. Instructions embedded in documents must never override system instructions or authorize tool use; the model should extract evidence, not obey documents.
+- Support search/filter by status, fact type, document and relevant lot/product/customer/supplier identifiers where practical.
+
+D. LOT TRACE AND INVESTIGATION LOGIC
+- Preserve and inspect the existing deterministic trace engine. Keep business rules separate from the AI extraction layer. The AI may suggest candidate facts but must not independently decide the authoritative trace graph.
+- Support forward trace from incoming raw-material lots through production/finished-product lots to dispatches/destinations, and backward trace from a finished product or destination where the evidence permits it.
+- Every trace edge must expose its evidence, fact/review status and why the edge was included. Distinguish at minimum: confirmed by reviewed facts, candidate pending review, inferred/possible, contradicted and unknown/unresolved.
+- Do not traverse a candidate edge as though it were confirmed. The result may display a broader precautionary candidate scope, but the confirmed and possible scopes must be separately labelled and explained.
+- Handle important seeded edge cases: missing dispatch page, conflicting quantities, ambiguous aliases/near-match such as O versus 0, duplicate evidence, similar-looking unaffected lot, unreviewed candidate fact, unit mismatch and records that cannot be parsed.
+- Explain ambiguities and offer a human review task instead of silently choosing the nearest string match.
+- Mass balance must be unit-aware and show the exact known inputs, outputs, conversions/assumptions and unknown quantities. If required quantities, unit conversions, wastage or destination records are missing or contradictory, report INSUFFICIENT/UNRESOLVED; do not show a green or complete result. Do not imply that numerical balance proves a safe product.
+- Running a trace must create a durable, time-stamped snapshot/version linked to the investigation and the evidence/fact versions it used. Later corrections must not silently rewrite historic runs; allow a new run with clear version history.
+- Provide a readable summary, affected confirmed lots, possible/candidate lots separately, known destinations, unresolved paths, evidence references, mass-balance status and explicit limitations.
+
+E. GAPS, AUDIT AND EXPORT
+- Gaps are computed from explicit investigation checks and trace results, not from a fragile UI counter. Show why each gap exists, which trace paths it affects, what evidence might resolve it and whether it remains open.
+- Audit meaningful events: imports, duplicate decisions, extraction attempts, fact edits/reviews, investigation changes, trace runs, exports, authentication/access changes if present, and failed security-sensitive operations. Make audit history append-only through normal product interfaces; document any limits to tamper resistance honestly.
+- Store enough trace-run metadata to reproduce the displayed output and show what facts were included and excluded. Preserve evidence references in the export.
+- Provide at least a usable CSV export for tabular results and a human-readable report (PDF if an existing reliable library is present; otherwise a clearly structured HTML/print view is acceptable). Include investigation ID, run ID/time, suspect lot, confirmed vs candidate scope, open gaps, mass-balance limitations, evidence/source references and the demo/pilot disclaimer.
+- Protect CSV exports against formula injection. Escape HTML safely. Exports must contain the actual saved run data, not hardcoded demo content.
+- Record exports in the audit trail. A failed export must return a visible error and must not record a successful export event.
+
+F. LIVE META AI INTEGRATION: ONE REAL INTEGRATION BEFORE EXTRA AI BREADTH
+RecallGraph is expected to use a Meta AI technology for the intended pitchathon. Prioritise a real Llama integration; do not spend this iteration on DINOv2/SAM 2 unless the core MVP is complete and there is a proven need.
+- Support a configurable OpenAI-compatible local inference endpoint (for example, an Ollama endpoint exposing its compatible API) with LLAMA_API_BASE_URL, LLAMA_API_KEY where required, and LLAMA_MODEL. Keep secrets server-side only. Document exact endpoint/model expectations, including URL shape, authentication and structured output constraints.
+- Use Llama for extracting candidate facts from parsed source text with source snippets/locations. All extraction is advisory and requires human review before becoming confirmed data.
+- Add explicit connection/model configuration validation, timeouts, cancellation, bounded retries only where safe, response size limits, structured-output validation, useful errors, and no leakage of secrets or full source text in logs.
+- No configured endpoint means honest demo/offline mode. An HTTP error, invalid JSON or timeout must produce a visible failed extraction status. It must never silently serve preloaded facts while claiming fresh inference occurred.
+- Clearly separate model modes in the UI/API: live inference succeeded, configured but not currently reachable, unavailable/not configured, deterministic parser, manual entry and seeded demo. Status must come from observed configuration/health results, not a hardcoded green badge.
+- Build provider contract tests with a local fake HTTP server for success, malformed output, timeout and HTTP failure, but label those as tests. They do not count as live-model verification.
+- If no local Llama service/weights are available in this environment, finish the real provider wiring and provider tests, document how an operator enables it, and explicitly leave live inference unverified. Do not claim the Meta integration is fully demonstrated until an actual request succeeds against an identified model.
+
+G. ACCESS CONTROL AND PILOT-SAFE DEFAULTS
+- Inspect the current security model first. If the app currently exposes business records without authentication, add a practical single-organization authentication approach using established ASP.NET Core facilities rather than a custom password scheme. Protect write, export, audit and configuration operations. Do not hardcode a shared production password or credentials in the frontend/repository.
+- Provision the initial pilot administrator through a documented environment/configuration or command-line setup path; never ship a universally known default admin password.
+- Keep authorization simple: administrator/configuration management and ordinary operator/reviewer workflow. Do not add complex enterprise roles without a concrete use case.
+- Set request/file size limits, validate uploads, use safe storage paths, secure cookies/CSRF posture as appropriate to the chosen auth approach, and apply appropriate CORS policy. Keep model keys only on the server.
+- Provide backup/restore instructions and a documented delete/retention approach for uploaded evidence and derived data. Ensure deleting a document does not silently falsify past investigations; define whether it is blocked, redacted or recorded as a retention event.
+- Treat these as sensible pilot safeguards, not a claim of POPIA compliance, certification, regulatory approval or production security assurance. Record residual risks and recommend a qualified review before processing confidential operational records.
+
+H. UX: FIT FOR A REAL OPERATOR
+- Keep the recent visual redesign and existing information architecture where useful. Do not add visual effects for their own sake.
+- Design around the operator's tasks rather than metrics alone: create investigation, import evidence, resolve facts, run trace, review gaps, export report.
+- Show a clear next action on empty, error, unconfigured-model and incomplete-data states. Distinguish loading, success, partial success and failure.
+- Give all primary actions clear labels and consequences; confirm destructive actions; prevent accidental double submissions where applicable.
+- Keep table columns readable, filters useful and source evidence easy to inspect. Provide keyboard focus, semantic labels, accessible contrast, responsive desktop/tablet/mobile layouts and no horizontal page overflow at common viewports.
+- Display counts derived from the same authoritative API data used by the screen. Avoid misleading metrics such as counting gap-state edges instead of actual unresolved gaps.
+- Clearly explain that AI suggestions require review and that the tool is for mock/pilot recall assistance, not autonomous safety decisions.
+
+I. ENGINEERING QUALITY AND OPERABILITY
+- Keep the existing .NET + EF Core + SQLite and React/TypeScript/Vite architecture unless a real blocker justifies a small, explained change.
+- Use EF Core migrations or an equivalent versioned database initialization path. Do not depend on deleting the database to obtain the right schema. Make fresh-install startup and upgrade from the current schema reproducible; never delete user data during automatic initialization.
+- Add readiness/health checks that distinguish API/database health from optional model availability. Missing optional Llama must not make the app impossible to open.
+- Use structured application logging with correlation/investigation/run IDs where useful, avoid secret/document-content leakage, and return consistent API errors without internal stack traces.
+- Add cancellation and reasonable timeouts for long-running parsing/model calls. Do not block requests indefinitely.
+- Add useful error boundaries and API error handling in the frontend. Never show success before the API confirms it.
+- Keep code typed and maintainable. Avoid abstractions added only to look architecturally sophisticated. Remove dead scaffolding only after verifying it is unused.
+- Add a one-command or clearly documented local startup workflow. Include exact Windows-friendly commands because the expected developer environment is Windows, while keeping scripts cross-platform where practical.
+
+J. TEST STRATEGY — PROVE THE WORKFLOW
+Add or improve tests at several levels. Keep synthetic ground truth independent of the implementation under test.
+1. Unit tests for parsing/normalization, source reference correctness, fact review transitions, lot-graph traversal, uncertainty propagation, gap generation, unit-aware mass balance and export escaping.
+2. API/integration tests using a temporary database and real API routes for import, persistence, review, trace snapshots, audit and export. Verify data survives application/service restart where practical.
+3. Llama provider tests using a controlled local HTTP test server: success; malformed schema; timeout; authentication/HTTP error; and no silent demo fallback.
+4. End-to-end browser tests for a realistic operator journey, not only that two pages render. At minimum test: create/open investigation; import permitted file; inspect source-backed fact; confirm/reject a candidate; run trace; inspect affected versus possible lots; inspect a gap; export; verify audit history. Include a failed import/model request path.
+5. Run the seeded scenario. It should identify the scenario's ground-truth affected lots FL-0514 and FL-0515, exclude FL-0516 from the confirmed affected set, preserve the missing-dispatch uncertainty, display the known destinations supported by records, and report insufficient mass balance while required evidence is absent. Do not assert these values if code inspection reveals the fixture has materially different documented truth; investigate and fix the fixture or explicitly report the discrepancy rather than changing tests to manufacture a pass.
+6. Test clean database initialization and restart persistence without wiping the database. Test a fresh pilot workspace is separate from the seeded demo workspace.
+7. Record which tests use synthetic fixtures or mocks. Do not describe a mock provider test as live AI success.
+
+DEFINITION OF MVP DONE
+Call this an MVP only when all applicable gates below are demonstrated. If a gate cannot be completed because of environment constraints, do not hide it; complete all independent work and label the outcome “MVP candidate — blocked on …” rather than “MVP complete.”
+
+GATE 1 — OPERATOR WORKFLOW
+A new operator can use documented commands to start the app, access the appropriate workspace, create an investigation, import real supported files, view parsed content, review/edit candidate facts with source locations, run a trace, inspect uncertainty/gaps, and export a saved report without editing the database manually.
+
+GATE 2 — DATA INTEGRITY
+The core workflow persists across restarts; review actions create audit events; historical trace runs remain stable; source links are exact and reproducible; demo data is isolated from pilot data; no critical user action returns false success.
+
+GATE 3 — INVESTIGATION CORRECTNESS
+The ground-truth synthetic scenarios pass, including the unaffected near-match, missing dispatch, conflict/uncertainty and insufficient mass balance. Candidate evidence is never silently treated as confirmed.
+
+GATE 4 — SECURITY AND DATA HANDLING
+Upload validation, safe storage, bounded request sizes, server-only secrets, access protection for sensitive actions, safe exports, useful error handling and backup/restore guidance are implemented and tested as far as practical. A remaining security review is disclosed.
+
+GATE 5 — AI HONESTY
+There is one real Llama provider path for candidate extraction, tested against a controlled HTTP server. Live inference has been demonstrated only if a real configured model request actually succeeded in this run. UI status always matches observed capability state. Demo facts can never be confused with live-model output.
+
+GATE 6 — REPRODUCIBILITY
+A clean setup guide works. Database initialization/migrations are repeatable. Backend build/tests, frontend lint/build, integration tests and end-to-end tests run and results are reported accurately. No failing checks are concealed or weakened merely to achieve green output.
+
+GATE 7 — PRODUCT READINESS
+The core journey is understandable without developer assistance; the UI presents clear progress, errors and next actions; supported file formats and model configuration are documented; and the demo/pilot limitations are explicit.
+
+WORK PLAN
+Stage 0 — Baseline and map: inspect repository, current database schema, API routes, UI routes, seed data, auth, import/export, model providers, tests and documentation. Run existing checks. Write a short prioritized gap list in a workspace document, but do not stop there.
+Stage 1 — Data model and persistence: implement only the required schema/migration and lifecycle changes; safeguard existing data. Add tests immediately.
+Stage 2 — Evidence and review: make real supported file ingestion, processing status, source-grounded candidate facts and durable human review work end to end.
+Stage 3 — Investigation and trace: persist investigations and immutable run snapshots; verify forward/backward relationships, candidate/confirmed separation, gap calculation and mass-balance uncertainty.
+Stage 4 — Audit/export: implement reliable run-specific export and consistent audit events.
+Stage 5 — Model integration: complete and test the Llama provider, honest status states and safe failure modes. Do not claim live inference unless actually performed.
+Stage 6 — Access, UX and operability: close high-risk security issues, improve error/empty/loading states, add setup/backup instructions and ensure the real operator journey is coherent.
+Stage 7 — Adversarial verification: run all checks; inspect actual app output; test the known failure cases; investigate failures to root cause; rerun after fixes. Review the diff for accidental changes and scope creep.
+
+Prioritize work by risk and value: first preserve data and make the core workflow correct; then source provenance and uncertainty; then access/security; then live Llama extraction; then UX polish. If time is constrained, explicitly defer lower-priority features rather than implementing hollow placeholders.
+
+FINAL RESPONSE FORMAT
+At completion, produce a concise but evidence-backed report with these sections:
+1. MVP status: “MVP candidate”, “MVP gates passed except …”, or “MVP complete against this mandate” — choose honestly.
+2. User-visible capabilities that actually work end to end.
+3. Files/modules changed and why.
+4. Database/schema/migration implications and how existing data was protected.
+5. Exact commands run and their actual results, including failures and environmental workarounds.
+6. Ground-truth scenario output: affected/possible lots, known destinations, gap state and mass-balance conclusion.
+7. AI capability table: live inference demonstrated; provider contract-tested only; configured but unavailable; demo/fixture; unavailable. Include model ID/endpoint type only when actually observed, and never expose secrets.
+8. Security/privacy safeguards added and residual risks.
+9. Deferred items and exact blockers.
+10. Reproducible Windows-friendly setup, migration, run, test and backup/restore commands.
+11. Honest next step for a small pilot and what must be validated with real operators. Do not claim product-market fit or customer validation without evidence.
+
+Start now. Inspect the workspace and current status, then implement the highest-value missing pieces. Do not answer with only a plan. Do not claim this mandate is complete until you have run the relevant checks and reported what actually happened.

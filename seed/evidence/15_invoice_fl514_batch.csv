@@ -1,0 +1,4 @@
+invoice_no,date,customer,finished_lot,qty,unit,batch_ref
+INV-7811,2026-09-14,Tuckshop Arendse (Benoni),FL-0514,1500,units,PB-2026-0912-A
+INV-7812,2026-09-14,Groot Pretoria Foods (Pty) Ltd,FL-0514,900,units,PB-2026-0912-A
+INV-7814,2026-09-15,Cafe Kapabela,FL-0515,1000,units,PB-2026-0913-R

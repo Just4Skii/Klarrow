@@ -1,0 +1,162 @@
+RECALLGRAPH — LONG-HORIZON ENGINEERING CHALLENGE
+AI-Assisted Mock Recall Workbench for Disconnected Food Traceability Evidence
+Working name only; verify naming before public launch.
+
+MISSION
+Build a portfolio-quality, working MVP that tests whether a food business can reconstruct a credible product trace from messy, disconnected records without replacing its ERP or traceability platform.
+
+This is a long-horizon engineering exercise, not a landing-page task. Work autonomously: inspect the workspace, create a plan, implement the complete vertical slice, run tests, inspect failures, repair them, and produce evidence of what works. Do not stop after scaffolding or after one successful build. Do not ask the user to implement missing parts. Do not claim a feature works unless you have run the relevant test or verified it in the running app.
+
+PROBLEM HYPOTHESIS — DO NOT PRESENT AS A PROVEN MARKET FACT
+Some smaller food manufacturers, packers, bakeries, distributors, and food-safety consultants may have important batch evidence spread across PDFs, photographs, spreadsheets, dispatch notes, goods-received sheets, production records and emails. Existing ERP / traceability products can provide integrated traceability, so RecallGraph must NOT claim traceability software is absent. It tests a narrower wedge: can AI turn previously unconnected evidence into a source-linked, reviewable trace faster than manually searching through the same evidence?
+
+A public demo proves technical feasibility only. It does not prove that businesses will buy the product. Be explicit about this in the README and pitch summary.
+
+TARGET USER
+A quality-assurance manager or food-safety consultant at a small/medium food operation who needs to run a mock recall or investigate a suspect batch using records not all held in one connected system.
+
+CORE USER PROMISE
+“Select a suspect lot. See what it can be traced to and where it may have gone, which facts are supported by documents, which links are inferred, what is missing, and what evidence is needed next.”
+
+NON-GOALS
+- Do not build a full ERP, warehouse management system, supplier portal, regulatory certification platform or live recall-notification service.
+- Do not integrate with real manufacturers, retailers or government systems for this MVP.
+- Do not claim compliance with BRCGS, GLOBALG.A.P. or any other standard; describe the app as an investigation aid, not a certification tool.
+- Do not treat LLM output as truth, silently invent a lot relationship, or automatically label AI-extracted claims as confirmed.
+- Do not fabricate customer research, benchmark results, partner interest or user validation.
+- Do not upload real confidential product or supplier documents to a remote AI endpoint without clear user notice and explicit configuration. The default demo must use synthetic data only.
+
+RECOMMENDED STACK
+Use a maintainable modular project rather than one giant file:
+- Backend: ASP.NET Core Web API on the .NET SDK installed in the environment; clean service boundaries; EF Core with SQLite for persistence.
+- Frontend: React + TypeScript + Vite. Use accessible HTML controls and a coherent responsive design; add a graph visualization only if it remains usable and reliable.
+- Testing: xUnit for backend/unit/API tests, frontend tests with Vitest where practical, and at least one browser-level end-to-end workflow (Playwright or an equivalent tool if installed and viable).
+- AI: implement an explicit provider adapter for a genuine Meta Llama model through a configurable OpenAI-compatible endpoint or other documented Llama endpoint. Read endpoint, API key and model from environment variables. Never hard-code secrets. Clearly show whether AI is connected, unavailable or in a clearly labeled deterministic demo mode. Deterministic fixtures are acceptable for tests, not as a fake claim that Llama ran.
+- File handling: support PDF with text, CSV, XLSX and image files where practical. Use real extraction/OCR capability where available. Where a scan cannot be read, preserve the file and let a human transcribe or correct the fields; do not fail silently. Keep parsing behind interfaces so new document types can be added.
+- Use stable dependencies compatible with the installed environment. Inspect versions and existing repo before choosing versions. Do not over-engineer with microservices.
+
+If the workspace already contains a project, inspect it first and preserve useful working code. If it is empty, create a complete solution. Record architecture decisions in docs/architecture.md.
+
+MVP WORKFLOW
+1. User opens the seeded demo workspace and sees the scenario, imported documents, current mock-recall runs, and data-quality status.
+2. User imports a supported document or loads the sample evidence pack.
+3. The extraction pipeline reads document content and asks Llama to map it to a constrained schema. Every extracted field retains source document, page/sheet/row or location when available, extraction timestamp, confidence, model/provider metadata and review status.
+4. The user reviews candidate facts and can confirm, edit or reject them. Confirmation must retain who confirmed it and when. LLM-generated facts remain “unreviewed” until a human confirms them.
+5. User selects a suspect raw-material lot or finished-product lot and runs a forward trace, backward trace, or both.
+6. The app builds a provenance graph and a human-readable trace report. Each relationship must be classified as CONFIRMED (human-reviewed source-backed evidence), CANDIDATE (extracted but not reviewed), INFERRED (derived by explicit matching logic and awaiting confirmation), or UNKNOWN / GAP. Do not conflate these states.
+7. User investigates exceptions, resolves or rejects candidate links, checks mass balance where data permits, and reruns the trace. The audit history shows changes.
+8. User exports a trace report as PDF or printable HTML and a machine-readable JSON/CSV package. Exported reports must carry “DEMO / NOT FOR OPERATIONAL FOOD-SAFETY DECISIONS” watermark for seeded data and make uncertainty visible.
+
+SEED DATA — MUST HAVE A KNOWN GROUND TRUTH
+Create a fictional South African snack/ready-to-eat food producer scenario with a known, deterministic ground-truth graph. Do not ask an LLM to generate the truth data and then use its own generated answer as evaluation. Hand-author the canonical entities and relationships in fixtures, and generate or write evidence documents from that independent fixture.
+
+Scenario outline:
+- Suspect raw material lot: RM-0427 (contamination is hypothetical, for demo only).
+- Supplier delivery, goods-received record, stock ledger, production batch sheet, a controlled rework entry, packaging/finished-lot record, and dispatch records to multiple fictional customers.
+- At least 2 finished lots affected; 1 unaffected lot that looks deceptively similar; one typo/alias in a source (for example O vs 0); one missing dispatch page; one quantity discrepancy that prevents a clean mass balance; one duplicate or conflicting record; dates spanning multiple days.
+- At least 20 source artifacts across several layouts/formats. Use a mixture of CSV/XLSX-like tables, plain-text/PDF-style documents, photographed-label fixtures, and irregular records. Use varied real-looking layouts, inconsistent date and number formats, shorthand supplier names, split columns, occasional scan-like noise and ambiguous handwriting represented honestly. If generated files are used, document how they were created. Include some purposely unreadable/incomplete evidence so the app can report uncertainty.
+- Dataset must be fictional and clearly labeled synthetic. Include a ground-truth JSON fixture that is used only by automated evaluation, not shown as if the app knows the answer from the start.
+- Include at least three exercises: a fully traceable lot, an incomplete trace with a genuine gap, and a misleading near-match that the system must not silently link.
+
+AI EXTRACTION CONTRACT
+Use Llama for a meaningful, demonstrated job: extracting fields and candidate relations from unstructured document text and, if the configured model and endpoint support it, images. Build a strict JSON schema and validate every response server-side. The prompt must tell the model to return null / unknown when information is absent, quote or cite evidence spans, distinguish exact strings from normalized values, and never infer a lot relationship from name similarity alone. Treat model output as untrusted input. Retry malformed output with bounded retries; surface failures instead of silently returning fabricated structured data.
+
+Required extraction fields when available:
+- document type; issuing entity; document reference; issue/transaction date; page/sheet/row provenance
+- product and raw material identifiers, exact lot/batch string, normalized candidate identifier (kept separately), quantities and units
+- origin/destination/supplier/customer/location; production/rework/receipt/dispatch event type
+- line-level evidence text or cells supporting each extracted claim
+- confidence or uncertainty note (not to be interpreted as calibrated probability)
+- unresolved ambiguity and conflicting evidence
+
+If no API credentials are set, app must still launch with the seeded, pre-parsed demo evidence and all non-AI flows usable. Clearly label that extraction is in demo/preloaded mode and show the setup instructions for live Llama extraction. Never describe deterministic fixture parsing as an actual Llama inference. In configured mode, create an integration test with a stub HTTP server to validate request/response parsing without a paid external call; document one manual live-provider smoke test that the developer can run when credentials are available.
+
+DATA MODEL MINIMUM
+- Workspace / scenario
+- SourceDocument and source location (file name, hash, type, page/row references)
+- ExtractedFact / EvidenceClaim with raw value, normalized value, source reference, review status, reviewer and timestamps
+- Business entity: supplier, raw lot, production batch, finished lot, customer, location
+- TraceEvent / relationship with exact evidence, direction, quantity/unit/date, linkage type, provenance and confidence note
+- TraceRun with selected lot, direction, timestamps, results, gaps, mass-balance results and status
+- AuditEvent for imports, edits, confirmations, rejections, trace runs and exports
+- AIExtractionRun storing model ID, prompt/schema version, status and errors but not secrets
+
+TRACE LOGIC AND SAFETY
+- Deterministic graph traversal must be implemented in application code, not entrusted to the LLM.
+- Normalize identifiers conservatively. Preserve the original source value. Similar-looking IDs (O/0, I/1, hyphens, leading zeros) may create candidate matches but never silent confirmed links.
+- Handle backward traversal from finished lot to its raw ingredient lots and forward traversal from raw lot to affected finished lots and customers.
+- Detect loops, duplicate edges and conflicting quantities. Do not crash on cycles or missing nodes.
+- Mass balance must account for units, known input/output/waste/inventory values and explicit unknowns. Do not invent missing quantities or call an incomplete reconciliation “passed.”
+- If the evidence is insufficient, the correct result is a clear gap with a document/task recommendation, not a confident guess.
+- Use synthetic information only in the seed data. Avoid personal data. Validate file type and size, restrict import paths, prevent path traversal, avoid unsafe document rendering and do not expose API keys in client code or logs.
+
+UI REQUIREMENTS
+Create a polished, credible B2B operations interface—not a generic marketing dashboard.
+- Workbench home with “new mock recall”, recent runs, evidence health, import count and open gaps.
+- Evidence inbox with source previews, document metadata, extracted fields, citations and Confirm / Edit / Reject actions.
+- Lot search with exact/near-match warnings.
+- Interactive trace view showing supplier → received lot → production/rework → finished lot → dispatch → customer. If a complex graph is poor on small screens, provide an equally clear accessible table/timeline view.
+- Trace-run summary with backward and forward results, confirmed vs candidate vs inferred links, affected lots/customers, quantity reconciliation, unknowns and unresolved documents.
+- Evidence side panel or drawer so any claim can be opened back to its source.
+- Export and audit log views.
+- Empty, loading, error, partial extraction, no-match, duplicate, malformed-file, provider-offline and recoverable-error states.
+- Responsive layout; keyboard focus; accessible labels; no tiny unreadable charts; realistic seeded data; consistent spacing and typography.
+- Every visible primary control must work. Remove dead buttons, fake progress indicators and TODO placeholders.
+
+SUCCESS METRICS
+Measure on the seeded scenarios, using independent ground truth:
+- Correct affected finished lots and destinations (precision/recall, or explicit confusion table).
+- Number of confirmed, candidate, inferred and unresolved links.
+- Mass-balance status: reconciled / discrepancy / insufficient data.
+- Source traceability coverage: percentage of displayed claims with a valid document/page/row reference.
+- User-observed completion time for a trace run. Provide a stopwatch or explicit elapsed-time record. Never invent or claim a speedup: manual baseline must be timed by a real evaluator and entered separately; the app may calculate the difference from entered measurements.
+- False-link rate in the deliberately ambiguous scenario.
+
+TESTING GATES (ALL MUST BE ATTEMPTED; REPORT PASS/FAIL HONESTLY)
+1. Clean install/build from README instructions.
+2. API starts, health endpoint works, SQLite schema initializes, seeded demo loads.
+3. Upload validates file type/size and rejects invalid or hostile path inputs.
+4. CSV fixture extraction and parsing are covered by automated tests.
+5. Llama provider adapter validates structured responses and handles timeout, HTTP error, malformed JSON and missing credentials.
+6. Fact confirmation/edit/rejection preserves provenance and creates audit events.
+7. Forward trace from RM-0427 finds all and only ground-truth affected finished lots and known destinations when evidence is complete.
+8. Backward trace from a finished lot reaches the correct raw lots.
+9. Near-match lot ID remains a candidate or gap until human confirmation; it must not be silently treated as identical.
+10. Missing dispatch evidence appears as a gap, not as “no affected customers.”
+11. Inconsistent quantities produce discrepancy/unknown status, not a false green pass.
+12. Trace run has stable IDs and preserves a snapshot of its result even if evidence is later edited.
+13. Export includes source references, uncertainty status, run timestamp and demo disclaimer.
+14. Audit log includes imports, edits, confirmations/rejections, trace runs and exports.
+15. UI end-to-end test completes seeded scenario from selecting a lot to viewing/exporting a trace report.
+16. Regression: no uncaught browser-console errors in the tested core workflow; no server exceptions on listed malformed cases.
+17. Secret scan and git diff hygiene; no credentials or real personal information committed.
+
+DELIVERABLES
+- Complete runnable source code and all source files. Do not paste only fragments.
+- Solution/project files, migrations or automatic schema initialization, and repeatable seed command.
+- A README with prerequisites, exact setup/run/test commands, Llama endpoint/model configuration, data flow, limitations, screenshots, demo walkthrough and troubleshooting.
+- docs/architecture.md, docs/data-model.md, docs/security-and-privacy.md, docs/evaluation.md and docs/assumptions-and-open-questions.md.
+- Synthetic evidence pack and independent ground truth fixtures.
+- Automated tests and their actual results.
+- A short pitch brief: user, current workaround, narrow wedge, why Meta Llama is materially useful, measurable demo result, what is and is not validated, competitors and known risks.
+- A final engineering report separating implemented, tested, partially implemented and unimplemented items, plus actual commands and outputs. If a test could not run due to missing tools/network/credentials, explain the blocker and do not claim it passed.
+
+FOUR-DAY EXECUTION PLAN
+Day 1 — Inspect environment, plan architecture, implement data schema/API, build synthetic canonical graph and create the evidence fixtures. Get one deterministic end-to-end trace working first.
+Day 2 — Build evidence inbox and review workflow; implement import/extraction interfaces and the real configurable Llama provider; handle uncertainty and source provenance.
+Day 3 — Implement forward/backward tracing, near-match candidates, gaps, mass balance, trace-run snapshots, audit events and report exports. Add seeded exercises.
+Day 4 — Complete the UI, run tests, fix actual failures, rehearse the demo, capture screenshots, write the README/evaluation report and verify a clean startup from documented instructions.
+
+Prioritize a complete, trustworthy vertical slice. If time becomes constrained, cut decorative visualizations before cutting provenance, correctness, tests or the core trace workflow. Do not claim full operational food-safety readiness.
+
+FINAL RESPONSE FORMAT
+At completion, report:
+1. What works and the shortest way to run it.
+2. Actual build/test commands and outcomes.
+3. Which acceptance gates passed, failed, or could not be run.
+4. Demonstration scenario results against independent ground truth.
+5. Meta Llama integration status: exact provider/model configuration tested, or explicitly not tested because credentials/provider were unavailable.
+6. Honest limitations, security/privacy risks and next steps before any real pilot.
+7. A concise GitHub project description and portfolio README summary.
+
+Start by inspecting the available workspace and tools. Then create the plan in a tracked file and continue autonomously through implementation, testing, repair and final verification. Do not stop to ask for permission between ordinary engineering steps. Preserve useful existing work. The result must be a working application, not a mockup of one.
