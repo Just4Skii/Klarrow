@@ -30,7 +30,7 @@
 | HTML export | Pilot-workspace provenance notice present | Pass in recorded check |
 | XLSX export | Five worksheets; tables; frozen headers; wrapped cells; print setup | Pass in recorded closeout |
 | Browser download / print check | XLSX download 30,664 bytes; 14 printed pages without clipping after row-height fix; HTML print 5 pages | Local browser validation, not an independent cross-platform Excel test |
-| GitHub Actions | CI workflow added during repository cleanup | Hosted run is pending; do not report CI as passing until GitHub confirms it |
+| GitHub Actions | [Run 39145909433](https://github.com/Just4Skii/Klarrow/actions/runs/39145909433), on cleanup commit `b4b870003006f7e6e54c5ee8be4373b592534597` | Success: restore, build, 40/40 .NET tests, frontend install, lint and production build |
 
 ## Run 4 observed state
 
@@ -53,9 +53,9 @@ The separate browser E2E flow from the closeout used a fresh seven-document / 35
 
 ## Open risks
 
-- High-severity transitive dependency advisories were reported for Microsoft.OpenApi 2.0.0, SQLitePCLRaw.lib.e_sqlite3 2.1.11, System.Security.Cryptography.Pkcs 9.0.0, and System.Security.Cryptography.Xml 9.0.0. Re-audit the current dependency graph before any deployment; do not upgrade broadly without regression testing.
+- The hosted CI run succeeded, but emitted dependency-vulnerability warnings for Microsoft.OpenApi 2.0.0, SQLitePCLRaw.lib.e_sqlite3 2.1.11, System.Security.Cryptography.Pkcs 9.0.0, and System.Security.Cryptography.Xml 9.0.0. It also emitted EF1002 warnings for interpolated SQL in schema initialization, unused-parameter compiler warnings, and two frontend fast-refresh warnings. The schema migration interpolations currently use code-owned, fixed identifier/definition lists rather than source-document values; this still deserves a deliberate security review, not a blanket claim of no risk. Re-audit and patch dependency advisories before any deployment; run regression tests after updates.
 - API-key middleware is optional and leaves health, extraction-status and capabilities endpoints public when configured. No production security review has been completed.
 - OCR for scanned images, RBAC/SSO, production deployment/monitoring, real customer/practitioner validation and independent real-document evaluation are not complete.
-- The current CI workflow is new and has not yet produced a verified hosted run at the time of this edit.
+- The recorded hosted run verifies the cleanup commit only. Future commits should be judged from their own current Actions result; a green build is not a security audit or deployment approval.
 
 **Decision:** suitable for controlled prototype demonstration and competition submission, subject to rehearsing the exact submitted build. Not suitable for production or regulatory reliance.

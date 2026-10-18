@@ -95,7 +95,7 @@ When configured, application routes require the `X-Api-Key` header except `/api/
 
 ## 6. Verification & Automated Test Suite
 
-Klarrow includes an integration test harness using temporary SQLite databases and isolated storage roots. A GitHub Actions workflow now runs the .NET build/tests and frontend lint/build on pushes and pull requests; the first hosted run must complete before treating CI as verified.
+Klarrow includes an integration test harness using temporary SQLite databases and isolated storage roots. A GitHub Actions workflow runs the .NET build/tests and frontend lint/build on pushes and pull requests. Check the repository’s Actions tab for the latest run status.
 
 ```powershell
 # Run the 40 automated integration tests
