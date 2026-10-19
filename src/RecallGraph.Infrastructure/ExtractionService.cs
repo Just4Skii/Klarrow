@@ -38,6 +38,28 @@ public sealed class ExtractionService(RecallGraphDbContext db, IAiExtractionProv
         db.AiExtractionRuns.Add(run);
         await db.SaveChangesAsync(ct);
 
+        if (string.Equals(provider.Status.Mode, "deterministic_only", StringComparison.OrdinalIgnoreCase))
+        {
+            run.Provider = "DeterministicParser";
+            run.ModelId = "none";
+            run.Status = "completed-deterministic";
+            run.CompletedAt = DateTime.UtcNow;
+            run.DocumentCount = docs.Count;
+            await db.SaveChangesAsync(ct);
+            await audit.AddAsync(workspaceId, "extraction_run", reviewer, $"Deterministic-only evaluation run: 0 AI candidate claim(s) requested across {docs.Count} document(s); structured parser output continues to the review workflow unchanged.", "AiExtractionRun", run.Id.ToString(), "{\"mode\":\"deterministic_only\",\"fixtureFallback\":false,\"factsCreated\":0}", ct);
+            return new ExtractionRunResultDto
+            {
+                ExtractionRunId = run.Id,
+                Status = run.Status,
+                IsDemo = false,
+                Provider = run.Provider,
+                ModelId = run.ModelId,
+                DocumentsProcessed = docs.Count,
+                FactsCreated = 0,
+                Error = null
+            };
+        }
+
         var factsCreated = 0;
         string? error = null;
         var fixtureFallback = !provider.Status.IsConfigured;

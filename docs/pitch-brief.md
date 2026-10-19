@@ -8,6 +8,6 @@ Narrow wedge: AI can turn disconnected evidence into a source-linked, reviewable
 
 Why Llama: structured extraction from messy unstructured text and cited fields; deterministic code remains responsible for graph traversal and status.
 
-Observed: clean API build/test, 40 automated backend tests, Run 4 live-Llama trace result on one authored seven-document scenario. This is engineering verification, not customer validation.
+Observed: clean API build/test, 43 automated backend tests, Run 4 live-Llama trace result on one authored seven-document scenario, and a three-scenario evaluation suite (deterministic vs local Llama). This is engineering verification, not customer validation.
 
 Not validated: customer demand, accuracy on real documents, manual baseline speed, model licenses fully executed.

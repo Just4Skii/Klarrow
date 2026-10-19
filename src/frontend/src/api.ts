@@ -7,7 +7,9 @@ import type {
   FactDto,
   FactHistoryDto,
   GapFindingDto,
+  HealthDto,
   ImportResultDto,
+  InvestigationDeleteResultDto,
   InvestigationDto,
   LlamaSmokeResultDto,
   MatchProposalDto,
@@ -38,6 +40,7 @@ const json = async (path: string, init?: RequestInit) => (await request(path, in
 export const api = {
   hasKey: () => Boolean(sessionStorage.getItem(API_KEY_STORAGE)),
   setKey: (key: string) => { if (key) sessionStorage.setItem(API_KEY_STORAGE, key); else sessionStorage.removeItem(API_KEY_STORAGE); },
+  health: () => json("/api/health") as Promise<HealthDto>,
   home: () => json("/api/workspace/home") as Promise<WorkspaceDto>,
   documents: (investigationId?: string) => json(`/api/documents${investigationId ? `?investigationId=${encodeURIComponent(investigationId)}` : ""}`) as Promise<DocumentDto[]>,
   document: (id: string) => json(`/api/documents/${id}`) as Promise<DocumentDto>,
@@ -62,6 +65,8 @@ export const api = {
   investigations: () => json("/api/investigations") as Promise<InvestigationDto[]>,
   createInvestigation: (body: { name: string; reference: string; suspectLotType: string; suspectLotId: string; description: string; status: string; actor: string }) =>
     json("/api/investigations", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }) as Promise<InvestigationDto>,
+  deleteInvestigation: (id: string, actor: string) =>
+    json(`/api/investigations/${id}?actor=${encodeURIComponent(actor)}`, { method: "DELETE" }) as Promise<InvestigationDeleteResultDto>,
   matches: (refresh = false) => json(`/api/match-proposals${refresh ? "?refresh=true" : ""}`) as Promise<MatchProposalDto[]>,
   aliases: () => json("/api/entity-aliases") as Promise<EntityAliasDto[]>,
   decideMatch: (id: string, action: "confirm" | "reject" | "defer", actor: string, reason: string) =>

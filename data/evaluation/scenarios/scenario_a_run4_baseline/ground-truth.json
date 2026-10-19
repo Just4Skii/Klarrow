@@ -1,0 +1,147 @@
+{
+  "scenarioId": "scenario_a_run4_baseline",
+  "title": "Run 4 baseline - Karoo Crunch cinnamon lead alert (RM-0873)",
+  "lockedAt": "2026-10-17",
+  "lockedProvenance": "Expectations derived by hand from the document text and the engine's deterministic rules before the live Run 4 execution; candidate/confirmed states and final counts cross-checked against the frozen Run 4 artefacts on 2026-10-18. The original locked narrative is C:\\Users\\mphoj\\AppData\\Local\\Temp\\opencode\\recall-live-run1\\ground-truth.md.",
+  "investigation": {
+    "name": "Karoo Crunch cinnamon lead alert (Run 4 baseline)",
+    "reference": "EVAL-A-RUN4",
+    "suspectLotType": "raw-lot",
+    "suspectLotId": "RM-0873"
+  },
+  "requiredFacts": {
+    "tokens": [
+      "RM-0873",
+      "RM-O873",
+      "PB-2026-1012-A",
+      "PB-2026-1013-B",
+      "FL-1021A",
+      "FL-1034C",
+      "Kandy Highland Spice Mill (Pvt) Ltd",
+      "Bosveld Tuckshop Distributors",
+      "Highveld Retail Group (Pty) Ltd",
+      "CS-CIN-0915"
+    ],
+    "quantities": [
+      { "value": 320, "unit": "kg" },
+      { "value": 180, "unit": "kg" },
+      { "value": 140, "unit": "kg" },
+      { "value": 3600, "unit": "units" },
+      { "value": 2800, "unit": "units" },
+      { "value": 1800, "unit": "units" },
+      { "value": 1200, "unit": "units" }
+    ],
+    "verbatimTraps": [
+      {
+        "fileName": "03_cinnamon_stock_ledger_sep_2026.csv",
+        "contains": "RM-O873",
+        "mustRemainVerbatim": true,
+        "note": "The confusable-code variant must be captured and stored verbatim; it must never be silently rewritten to RM-0873."
+      }
+    ]
+  },
+  "requiredLinks": [
+    { "linkKind": "supplier_delivery", "fromType": "supplier", "fromId": "Kandy Highland Spice Mill (Pvt) Ltd", "toType": "raw-lot", "toId": "RM-0873", "quantity": 320, "quantityUnit": "kg", "eventDate": "2026-09-18", "finalState": "Confirmed" },
+    { "linkKind": "raw_to_batch", "fromType": "raw-lot", "fromId": "RM-0873", "toType": "production-batch", "toId": "PB-2026-1012-A", "quantity": 180, "quantityUnit": "kg", "finalState": "Confirmed" },
+    { "linkKind": "batch_to_finished", "fromType": "production-batch", "fromId": "PB-2026-1012-A", "toType": "finished-lot", "toId": "FL-1021A", "quantity": 3600, "quantityUnit": "units", "finalState": "Confirmed" },
+    { "linkKind": "raw_to_batch", "fromType": "raw-lot", "fromId": "RM-O873", "toType": "production-batch", "toId": "PB-2026-1013-B", "quantity": 140, "quantityUnit": "kg", "finalState": "Confirmed" },
+    { "linkKind": "batch_to_finished", "fromType": "production-batch", "fromId": "PB-2026-1013-B", "toType": "finished-lot", "toId": "FL-1034C", "quantity": 2800, "quantityUnit": "units", "finalState": "Confirmed" },
+    { "linkKind": "finished_to_dispatch", "fromType": "finished-lot", "fromId": "FL-1021A", "toType": "customer", "toId": "Bosveld Tuckshop Distributors", "quantity": 1800, "quantityUnit": "units", "finalState": "Confirmed" },
+    { "linkKind": "finished_to_dispatch", "fromType": "finished-lot", "fromId": "FL-1021A", "toType": "customer", "toId": "Highveld Retail Group (Pty) Ltd", "quantity": 1200, "quantityUnit": "units", "finalState": "Confirmed" }
+  ],
+  "expectedNoiseLinks": [
+    {
+      "linkKind": "finished_to_dispatch",
+      "fromType": "finished-lot",
+      "fromId": "FL-1034C",
+      "toType": "customer",
+      "toIdContains": "PB-2026-1013-B",
+      "quantity": 2800,
+      "quantityUnit": "units",
+      "expectedFinalState": "Rejected",
+      "note": "The production-log output line contains no customer, so the deterministic customer fallback picks the line fragment as a pseudo-customer. Run 4 generated this candidate and the operator rejected it. The evaluation suite records it as an expected, correctly-rejected false positive - it must never be silently suppressed or silently confirmed."
+    }
+  ],
+  "forbiddenLinkPatterns": [
+    { "description": "The supplier alert document is context only and must not contribute any relationship.", "evidenceContains": "consigned to your site", "endpointKinds": ["supplier_delivery"] },
+    { "description": "The ledger sample row (QA-77, 0.5 kg) must not create any batch relationship.", "evidenceContains": "sample issue", "endpointKinds": ["raw_to_batch"] }
+  ],
+  "expectedMatchProposals": [
+    {
+      "pairUnordered": ["RM-0873", "RM-O873"],
+      "stableKey": "near-match:RM-0873:RM-O873",
+      "score": 0.5,
+      "scoreKind": "heuristic-not-calibrated",
+      "initialState": "Candidate",
+      "finalStateAfterScript": "Deferred"
+    }
+  ],
+  "forbiddenMatchPairs": [
+    { "pairUnordered": ["FL-1021A", "FL-1034C"] },
+    { "pairUnordered": ["PB-2026-1012-A", "PB-2026-1013-B"] }
+  ],
+  "expectedFindings": {
+    "preReviewKindsWithEntity": [
+      { "kind": "ambiguous-identifier", "relatedEntityType": "raw-lot", "relatedEntityId": "RM-0873" },
+      { "kind": "quantity-mismatch", "relatedEntityType": "raw-lot", "relatedEntityId": "RM-0873" },
+      { "kind": "unreviewed-candidates" }
+    ],
+    "mustNotExistKinds": [
+      "missing-upstream-evidence"
+    ],
+    "note": "The quantity-mismatch (320 received vs 180 consumed) is expected while the RM-O873 issue remains a separate unconfirmed node. No missing-batch-input finding: both batches have incoming links."
+  },
+  "expectedAiClaims": [
+    { "subjectContains": "DSP-5011", "quantity": 1800, "unit": "units" },
+    { "subjectContains": "DSP-5012", "quantity": 1200, "unit": "units" },
+    { "subjectContains": "RM-0873", "quantity": 320, "unit": "kg" },
+    { "subjectContains": "RM-O873", "quantity": 140, "unit": "kg" },
+    { "subjectContains": "PB-2026-1012-A", "quantity": 180, "unit": "kg" },
+    { "subjectContains": "PB-2026-1013-B", "quantity": 140, "unit": "kg" }
+  ],
+  "expectedAiClaimNote": "These are structured interpretation rows that the frozen Run 4 llama3.2:3b extraction produced and that a review desk can actually consume (subject + quantity + unit). Scored only in llama extraction mode; null in deterministic-only mode by design.",
+  "decisionScript": {
+    "confirmLinks": [
+      { "linkKind": "supplier_delivery", "fromId": "Kandy Highland Spice Mill (Pvt) Ltd", "toId": "RM-0873" },
+      { "linkKind": "raw_to_batch", "fromId": "RM-0873", "toId": "PB-2026-1012-A" },
+      { "linkKind": "batch_to_finished", "fromId": "PB-2026-1012-A", "toId": "FL-1021A" },
+      { "linkKind": "raw_to_batch", "fromId": "RM-O873", "toId": "PB-2026-1013-B" },
+      { "linkKind": "batch_to_finished", "fromId": "PB-2026-1013-B", "toId": "FL-1034C" },
+      { "linkKind": "finished_to_dispatch", "fromId": "FL-1021A", "toId": "Bosveld Tuckshop Distributors" },
+      { "linkKind": "finished_to_dispatch", "fromId": "FL-1021A", "toId": "Highveld Retail Group (Pty) Ltd" }
+    ],
+    "rejectLinks": [
+      { "fromId": "FL-1034C", "toIdContains": "PB-2026-1013-B" }
+    ],
+    "matchDecisions": [
+      { "pairUnordered": ["RM-0873", "RM-O873"], "action": "defer", "reason": "Run 4 evaluation: variant identity deliberately left unconfirmed." }
+    ],
+    "regenerateAfterAlias": false,
+    "note": "2026-10-19 (pre-execution runner plumbing, no expectations changed): each trace entry now carries a label matching the expectedTrace keys, and the post-decisions trace that expectedTrace already described is now explicit in the script.",
+    "traces": [
+      { "label": "preReview", "selectedType": "raw-lot", "selectedId": "RM-0873", "direction": "both", "traceBeforeDecisions": true },
+      { "label": "postDecisions", "selectedType": "raw-lot", "selectedId": "RM-0873", "direction": "both" }
+    ]
+  },
+  "expectedTrace": {
+    "preReview": {
+      "confirmedFinishedLots": [],
+      "confirmedCustomers": [],
+      "possiblyReachableFinishedLots": ["FL-1021A"],
+      "possiblyReachableCustomers": ["Bosveld Tuckshop Distributors", "Highveld Retail Group (Pty) Ltd"],
+      "mustNotReach": ["FL-1034C"],
+      "massBalanceStatus": "insufficient"
+    },
+    "postDecisions": {
+      "confirmedFinishedLots": ["FL-1021A"],
+      "confirmedCustomers": ["Bosveld Tuckshop Distributors", "Highveld Retail Group (Pty) Ltd"],
+      "possiblyReachableFinishedLots": [],
+      "possiblyReachableCustomers": [],
+      "mustNotReach": ["FL-1034C"],
+      "massBalanceStatus": "insufficient",
+      "massBalanceInput": { "value": 320, "unit": "kg" },
+      "massBalanceOutput": { "value": 6600, "unit": "units" },
+      "stateCounts": { "Confirmed": 5, "Candidate": 0 }
+    }
+  }
+}

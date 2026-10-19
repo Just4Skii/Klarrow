@@ -1,0 +1,5 @@
+date,movement,reference,lot_code,to_batch,quantity,unit
+2026-09-18,receipt,RCP-8891,RM-0873,,320,kg
+2026-09-25,issue,WO-2211,RM-0873,PB-2026-1012-A,180,kg
+2026-09-26,issue,WO-2212,RM-O873,PB-2026-1013-B,140,kg
+2026-09-28,sample issue,QA-77,RM-0873,,0.5,kg

@@ -1,8 +1,8 @@
 # Klarrow - Claims and Evidence Register
 
-**Version:** 2.0.0
-**Date:** 2026-10-18
-**Status:** Current-facing register after the Run 4 correction. It replaces the earlier 28-test/8-quote-verified wording.
+**Version:** 2.1.0
+**Date:** 2026-10-19
+**Status:** Current-facing register after the Run 4 correction, extended with the evaluation-suite evidence from run `eval-dev-20261019-final` (three scenarios, deterministic vs llama) and the provider-hardening disclosure. It replaces the earlier 28-test/8-quote-verified wording.
 
 This register separates what is implemented and observed from what is still unproven. It is written for pitch and submission use. It is not an independent validation report.
 
@@ -29,7 +29,9 @@ Use "open-weight" for Llama, not unrestricted "open source". Klarrow is not a re
 | 11 | Workspace open-gap count matches persisted findings | `WorkspaceService` counts open `GapFindings`; test compares to `/api/gaps` | "The workspace open-gap count uses the same persisted findings as the Findings page." | Do not confuse trace `Gap` links with persisted findings. |
 | 12 | Explicit suspect-lot assignment | Both creation forms have an optional suspect-lot selector; unassigned remains valid | "An operator can assign the suspect lot explicitly or leave it unassigned." | Existing legacy cases may still show "Not assigned"; that is valid. |
 | 13 | Real local Meta Llama integration | Run 4: local Ollama `llama3.2:3b`, smoke test passed, 57.9 s wall-clock extraction, 15 AI facts; provider/model metadata | "Local Meta Llama 3.2 3B proposes candidate facts; deterministic code and humans decide." | Not a thin wrapper, but the model is used for extraction, not graph traversal. One run; no accuracy study. |
-| 14 | Engineering verification | 40/40 .NET tests; separate targeted XLSX test 1/1; frontend lint 0 errors/2 pre-existing warnings; production build; 25/25 Playwright | "The current tree passes its automated checks." | Not production readiness, not real-document validation, not hostile-input/concurrency testing. |
+| 14 | Engineering verification | 43/43 .NET tests in the 2026-10-19 working tree; separate targeted XLSX test 1/1; frontend lint 0 errors/2 pre-existing warnings; production build; 25/25 Playwright; evaluation suite run `eval-dev-20261019-final` | "The current tree passes its automated checks." | Not production readiness, not real-document validation, not hostile-input/concurrency testing. The Run 4-era count was 40/40; the current tree adds three tests (two earlier additions plus one provider-parsing regression test). |
+| 15 | Deterministic evaluation baseline | Evaluation suite run `eval-dev-20261019-final` (`scripts/evaluation/run-scenario.mjs`): three authored scenarios × 13 locked checks = 39/39 checks pass in deterministic mode; 0 AI rows by design; manifests SHA-256-verified; report in `docs/evaluation/model-value-evaluation.md` | "On three authored scenarios the deterministic parser met every locked expectation (13/13 checks each)." | Three authored scenarios, not accuracy evidence, `n=3`; no real-document performance was measured. |
+| 16 | Optional Llama mode is supervised and noisy on fragmented evidence | Same run: llama mode passes A (13/13) and B (13/13), scores 11/13 on C with three extra `Candidate` links (two AI-extraction cross-links plus one supplier link generated from an AI fact) and claim recall 1.00 / 0.60 / 0.25; locator rate 1.00 in all llama runs; nothing auto-confirmed | "With the local 3B model, AI extraction added 10–15 candidate rows per scenario and passed all checks on two of three scenarios; on the fragmented-evidence scenario it added extra candidate links that stayed in `Candidate` state and entered no confirmed scope without human review." | Do not claim llama mode equals or exceeds deterministic reliability; scenario C shows candidate noise and lower claim recall. One small local model, no accuracy study. |
 
 ## 3. Run 4 benchmark truth
 
@@ -58,7 +60,12 @@ Single controlled scenario, seven **authored fictional** documents, locked team-
 - The trace matched the locked ground truth.
 - Mass balance stayed insufficient rather than inventing a conversion.
 - The rejected false-positive customer row was removed while the audit record remained.
-- The current automated suite is green: 40 .NET tests and 25 browser tests.
+- The current automated suite is green: 43 .NET tests and 25 browser tests.
+- The deterministic mode passed all 13 locked checks on all three evaluation scenarios
+  (`eval-dev-20261019-final`); in llama mode the same checks passed on A and B, and the C-scenario
+  extra candidate links remained `Candidate` and were never auto-confirmed.
+- The extraction provider's parser was hardened after observing a real model-malformation failure,
+  with a regression test, and the disclosure is recorded in the validation log.
 
 ## 5. Claims to avoid
 

@@ -51,4 +51,18 @@ public sealed class InvestigationsController(WorkspaceService workspaces, Invest
             return NotFound();
         }
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult<InvestigationDeleteResultDto>> Delete(Guid id, [FromQuery] string actor = "operator", CancellationToken ct = default)
+    {
+        var ws = await workspaces.GetOrCreateDemoAsync(ct);
+        try
+        {
+            return Ok(await investigations.DeleteAsync(ws.Id, id, actor, ct));
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
 }

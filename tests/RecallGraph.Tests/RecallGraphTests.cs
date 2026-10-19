@@ -57,6 +57,9 @@ public sealed class ApiTests(RecallGraphFactory factory) : IClassFixture<RecallG
         var client = factory.CreateClient();
         var health = await client.GetAsync("/api/health");
         Assert.Equal(HttpStatusCode.OK, health.StatusCode);
+        var healthBody = await health.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal("none", healthBody.GetProperty("accessControl").GetProperty("mode").GetString());
+        Assert.Contains("Local prototype mode", healthBody.GetProperty("accessControl").GetProperty("notice").GetString());
 
         var home = await client.GetFromJsonAsync<JsonElement>("/api/workspace/home");
         Assert.True(home.GetProperty("isDemo").GetBoolean());
@@ -212,6 +215,22 @@ public sealed class ApiTests(RecallGraphFactory factory) : IClassFixture<RecallG
             Assert.False(provider.Status.IsConfigured);
             var result = await provider.ExtractAsync("text", null, null, "file.txt");
             Assert.False(result.IsValid);
+        }
+    }
+
+    [Fact]
+    public async Task Provider_adapter_skips_malformed_fact_rows_and_coerces_numeric_raw_values()
+    {
+        var options = new LlamaOptions("http://localhost:9", "key", "meta-llama/Llama-3.1-70B-Instruct", 5);
+        var tolerantHandler = new StubHandler(@"{""choices"":[{""message"":{""content"":""{\""facts\"":[{\""rawValue\"":500},{\""rawValue\"":null},\""not-an-object\"",{\""rawValue\"":\""ok\""}]}""}}]}");
+        using (var http = new HttpClient(tolerantHandler))
+        {
+            var provider = new OpenAiCompatibleLlamaProvider(http, options);
+            var result = await provider.ExtractAsync("text", null, null, "file.txt");
+            Assert.True(result.IsValid);
+            Assert.Equal(2, result.Facts.Count);
+            Assert.Equal("500", result.Facts[0].RawValue);
+            Assert.Equal("ok", result.Facts[1].RawValue);
         }
     }
 
@@ -1318,7 +1337,11 @@ public sealed class ApiKeyTests(ApiKeyFactory factory) : IClassFixture<ApiKeyFac
     public async Task Configured_api_key_protects_business_routes_but_not_health()
     {
         var client = factory.CreateClient();
-        Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/health")).StatusCode);
+        var health = await client.GetAsync("/api/health");
+        Assert.Equal(HttpStatusCode.OK, health.StatusCode);
+        var healthBody = await health.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.Equal("token", healthBody.GetProperty("accessControl").GetProperty("mode").GetString());
+        Assert.Contains("Not enterprise identity/access management", healthBody.GetProperty("accessControl").GetProperty("notice").GetString());
 
         var unauthorized = await client.GetAsync("/api/workspace/home");
         Assert.Equal(HttpStatusCode.Unauthorized, unauthorized.StatusCode);
@@ -1364,6 +1387,24 @@ public sealed class StubAiProvider(List<LlmFactCandidate>? candidates = null) : 
         => Task.FromResult(new LlmExtractionResult(
             candidates ?? DefaultCandidates,
             true, null, "{}", "Stub Llama", "stub-model-1"));
+}
+
+public sealed class DeterministicOnlyStubProvider : IAiExtractionProvider
+{
+    public bool ExtractCalled { get; private set; }
+    public AiProviderStatusDto Status => new()
+    {
+        IsConfigured = false,
+        Mode = "deterministic_only",
+        Provider = "none",
+        ModelId = string.Empty,
+        Message = "Deterministic-only evaluation mode."
+    };
+    public Task<LlmExtractionResult> ExtractAsync(string documentText, string? imageBase64, string? imageMimeType, string fileName, CancellationToken ct = default)
+    {
+        ExtractCalled = true;
+        return Task.FromResult(new LlmExtractionResult([], false, "disabled", string.Empty, "none", string.Empty));
+    }
 }
 
 public sealed class GroundingDedupFactory(IAiExtractionProvider? provider = null) : WebApplicationFactory<Program>
@@ -1735,6 +1776,121 @@ public sealed class GroundingAndDedupTests
         Assert.Single(ambiguous);
         Assert.Equal("RM-0902", ambiguous[0].GetProperty("scope").GetString());
         Assert.Contains("RM-O902", ambiguous[0].GetProperty("explanation").GetString()!);
+    }
+}
+
+public sealed class InvestigationDeletionTests(RecallGraphFactory factory) : IClassFixture<RecallGraphFactory>
+{
+    [Fact]
+    public async Task Deleting_investigation_removes_scoped_evidence_and_writes_deletion_audit()
+    {
+        var client = factory.CreateClient();
+        var invResp = await client.PostAsJsonAsync("/api/investigations", new
+        {
+            name = "Deletion regression case",
+            reference = "DEL-1",
+            suspectLotType = "raw-lot",
+            suspectLotId = "RM-5001",
+            description = "delete regression",
+            status = "Open",
+            actor = "tester"
+        });
+        Assert.True(invResp.IsSuccessStatusCode);
+        var invId = (await invResp.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("id").GetString()!;
+
+        using var form = new MultipartFormDataContent();
+        form.Add(new StringContent(invId), "investigationId");
+        var file = new ByteArrayContent(Encoding.UTF8.GetBytes("GRN-5511 | RM-5001 | 100 kg | 2026-10-01\n"));
+        file.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { Name = "file", FileName = "delete_regression.txt" };
+        file.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
+        form.Add(file);
+        var upload = await client.PostAsync("/api/documents/upload", form);
+        Assert.True(upload.IsSuccessStatusCode);
+        var docId = (await upload.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("documentId").GetGuid();
+
+        var docsBefore = await client.GetFromJsonAsync<JsonElement>($"/api/documents?investigationId={invId}");
+        Assert.Equal(1, docsBefore.GetArrayLength());
+
+        string storedPath;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<RecallGraphDbContext>();
+            var doc = await db.SourceDocuments.FirstAsync(x => x.Id == docId);
+            Assert.Equal(Guid.Parse(invId), doc.InvestigationId);
+            storedPath = doc.StoredPath;
+        }
+        Assert.True(File.Exists(storedPath));
+
+        var del = await client.DeleteAsync($"/api/investigations/{invId}?actor=deletion-test");
+        Assert.Equal(HttpStatusCode.OK, del.StatusCode);
+        var body = await del.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.True(body.GetProperty("deleted").GetBoolean());
+        Assert.Equal(1, body.GetProperty("documentsDeleted").GetInt32());
+        Assert.True(body.GetProperty("factsDeleted").GetInt32() >= 1);
+        Assert.True(body.GetProperty("filesDeleted").GetInt32() >= 1);
+        Assert.True(body.GetProperty("limitations").GetArrayLength() >= 1);
+
+        Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync($"/api/investigations/{invId}")).StatusCode);
+        var docsAfter = await client.GetFromJsonAsync<JsonElement>($"/api/documents?investigationId={invId}");
+        Assert.Equal(0, docsAfter.GetArrayLength());
+        Assert.False(File.Exists(storedPath));
+
+        var audits = await client.GetFromJsonAsync<JsonElement>("/api/workspace/audits");
+        var deletion = audits.EnumerateArray().First(x => x.GetProperty("eventType").GetString() == "investigation_deleted");
+        Assert.Contains("DEL-1", deletion.GetProperty("description").GetString()!);
+        Assert.Contains("\"documents\":1", deletion.GetProperty("payloadJson").GetString()!);
+    }
+}
+
+public sealed class DeterministicOnlyModeTests
+{
+    [Fact]
+    public async Task Deterministic_only_mode_skips_provider_and_records_mode_without_ai_facts()
+    {
+        var provider = new DeterministicOnlyStubProvider();
+        using var local = new GroundingDedupFactory(provider);
+        var client = local.CreateClient();
+
+        var invResp = await client.PostAsJsonAsync("/api/investigations", new
+        {
+            name = "Deterministic mode case",
+            reference = "DET-1",
+            suspectLotType = "raw-lot",
+            suspectLotId = "RM-6001",
+            description = "deterministic-only regression",
+            status = "Open",
+            actor = "tester"
+        });
+        Assert.True(invResp.IsSuccessStatusCode);
+        var invId = (await invResp.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("id").GetString()!;
+
+        using var form = new MultipartFormDataContent();
+        form.Add(new StringContent(invId), "investigationId");
+        var file = new ByteArrayContent(Encoding.UTF8.GetBytes("DN-6601 | Acme Supplies | RM-6001 | 250 kg | 2026-10-02\n"));
+        file.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data") { Name = "file", FileName = "deterministic_mode.txt" };
+        file.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
+        form.Add(file);
+        var upload = await client.PostAsync("/api/documents/upload", form);
+        Assert.True(upload.IsSuccessStatusCode);
+        var docId = (await upload.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("documentId").GetGuid();
+
+        using var scope = local.Services.CreateScope();
+        var ws = await scope.ServiceProvider.GetRequiredService<WorkspaceService>().GetOrCreateDemoAsync();
+        var run = await scope.ServiceProvider.GetRequiredService<ExtractionService>().RunAsync(ws.Id, new List<Guid> { docId }, "deterministic-test");
+
+        Assert.Equal("completed-deterministic", run.Status);
+        Assert.Equal("DeterministicParser", run.Provider);
+        Assert.Equal("none", run.ModelId);
+        Assert.Equal(0, run.FactsCreated);
+        Assert.False(run.IsDemo);
+        Assert.False(provider.ExtractCalled);
+
+        var db = scope.ServiceProvider.GetRequiredService<RecallGraphDbContext>();
+        Assert.False(await db.ExtractedFacts.AnyAsync(x => x.SourceDocumentId == docId && x.ExtractionMethod == "ai-extraction"));
+        Assert.True(await db.ExtractedFacts.AnyAsync(x => x.SourceDocumentId == docId && x.ExtractionMethod == "deterministic-parser"));
+
+        var audits = await db.AuditEvents.Where(x => x.WorkspaceId == ws.Id).ToListAsync();
+        Assert.Contains(audits, x => x.EventType == "extraction_run" && x.PayloadJson.Contains("deterministic_only"));
     }
 }
 

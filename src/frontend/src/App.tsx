@@ -9,6 +9,7 @@ import type {
   FactDto,
   FactHistoryDto,
   GapFindingDto,
+  HealthDto,
   InvestigationDto,
   LlamaSmokeResultDto,
   LotOptionDto,
@@ -602,6 +603,9 @@ export default function App() {
   const [dragActive, setDragActive] = useState(false);
   const [requiresKey, setRequiresKey] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState("");
+  const [platformHealth, setPlatformHealth] = useState<HealthDto | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<InvestigationDto | null>(null);
+  const [deleteBusy, setDeleteBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const lotSelectRef = useRef<HTMLSelectElement>(null);
@@ -613,6 +617,7 @@ export default function App() {
   const edgeTrap = useFocusTrap(!!selectedEdge);
   const sourceTrap = useFocusTrap(sourceView.open);
   const deskHelpTrap = useFocusTrap(deskHelpOpen);
+  const deleteTrap = useFocusTrap(!!deleteTarget);
 
   const loadAll = async () => {
     try {
@@ -671,6 +676,18 @@ export default function App() {
   // eslint-disable-next-line react/set-state-in-effect
   useEffect(() => {
     void loadAll();
+  }, []);
+
+  // Public diagnostics: access-control mode banner, available before authentication.
+  // eslint-disable-next-line react/set-state-in-effect
+  useEffect(() => {
+    void (async () => {
+      try {
+        setPlatformHealth(await api.health());
+      } catch {
+        /* diagnostics only — banner stays hidden when the API is unreachable */
+      }
+    })();
   }, []);
 
   // Sync Hash Route (#/home, #/evidence, etc.) when browser hash changes externally
@@ -948,6 +965,32 @@ export default function App() {
       setAudits(a);
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
+    }
+  };
+
+  const performDeleteInvestigation = async () => {
+    if (!deleteTarget) return;
+    setDeleteBusy(true);
+    setError(null);
+    try {
+      const result = await api.deleteInvestigation(deleteTarget.id, "operator");
+      const remaining = investigations.filter((x) => x.id !== deleteTarget.id);
+      setInvestigations(remaining);
+      if (selectedInvestigation === deleteTarget.id) {
+        setSelectedInvestigation(remaining[0]?.id ?? "");
+      }
+      const limitationNote = result.limitations.length > 0 ? ` Deletion boundaries: ${result.limitations.join(" ")}` : "";
+      setMessage(
+        `Investigation "${result.reference || deleteTarget.name}" deleted - removed ${result.documentsDeleted} document(s), ${result.factsDeleted} claim(s), ${result.reviewEventsDeleted} review decision(s), ${result.traceRunsDeleted} trace run(s), ${result.findingsDeleted} finding(s), ${result.filesDeleted} stored file(s). Recorded in the audit trail.${limitationNote}`
+      );
+      setDeleteTarget(null);
+      const [w, a] = await Promise.all([api.home(), api.audits()]);
+      setWorkspace(w);
+      setAudits(a);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setDeleteBusy(false);
     }
   };
 
@@ -1550,6 +1593,23 @@ export default function App() {
                 ? "Synthetic demonstration data active. Not for operational food-safety decisions."
                 : `Pilot workspace contains ${workspace?.syntheticDocumentCount ?? 0} seeded synthetic demonstration document(s). Synthetic records are tagged and must not be used for operational decisions.`}
             </span>
+          </div>
+        )}
+        {platformHealth && (
+          <div
+            className={`warning-banner${platformHealth.accessControl.mode === "none" ? " warning-caution" : " warning-info"}`}
+            role="note"
+          >
+            <Icon name={platformHealth.accessControl.mode === "none" ? "alert" : "check-circle"} width={18} height={18} />
+            <div>
+              <strong>
+                {platformHealth.accessControl.mode === "none"
+                  ? "Local prototype mode - API access control not configured"
+                  : "API-token access control enabled (single shared key)"}
+              </strong>
+              {platformHealth.accessControl.notice}
+              {platformHealth.accessControl.mode === "token" && " One shared session key per deployment - not per-user accounts, SSO, or role-based access management."}
+            </div>
           </div>
         )}
         {!online && (
@@ -3492,6 +3552,35 @@ export default function App() {
                   </label>
                 </section>
 
+                <section className="panel" aria-labelledby="boundary-heading">
+                  <span className="eyebrow">Security & Data Boundary</span>
+                  <h2 id="boundary-heading">Data & Security Boundary</h2>
+                  <ul className="plain-list">
+                    <li>
+                      <strong>Local-first storage:</strong> evidence files and the workspace database (SQLite) live on the machine running Klarrow; storage paths are operator-configured.
+                    </li>
+                    <li>
+                      <strong>AI extraction data flow:</strong> when live AI extraction runs, the extracted text of uploaded documents is sent to the configured inference endpoint ({ai?.endpoint || "LLAMA_API_BASE_URL"}). Pointed at a local Ollama instance, no evidence text leaves your infrastructure.
+                    </li>
+                    <li>
+                      <strong>Access control:</strong>{" "}
+                      {platformHealth?.accessControl.mode === "token"
+                        ? "API-token protected via a single shared key"
+                        : "not configured (local prototype mode)"}{" "}
+                      - {platformHealth?.accessControl.notice || "mode not yet checked"} No user accounts, SSO, or role-based permissions.
+                    </li>
+                    <li>
+                      <strong>Deletion:</strong> investigations can be deleted from the Investigations tab. Scoped documents, claims, decisions, links, findings, and stored files are removed and the deletion is written to the audit trail; declared limitations are reported to the operator.
+                    </li>
+                    <li>
+                      <strong>Document parsers:</strong> text, CSV/TSV, EML, XLSX/XLS, and PDF text-layer extraction only. Binary images are retained in the evidence vault for manual inspection - no OCR.
+                    </li>
+                    <li>
+                      <strong>Audit trail:</strong> append-only operator log of decisions and actions within this workspace - it is not tamper-evident or externally notarized.
+                    </li>
+                  </ul>
+                </section>
+
                 <section className="panel" aria-labelledby="keystore-heading">
                   <h2 id="keystore-heading">Session API Authentication</h2>
                   <p className="panel-copy">
@@ -3610,16 +3699,26 @@ export default function App() {
                             <td data-label="Trace Snapshots">{i.traceRunCount}</td>
                             <td data-label="Last Updated">{formatDateTime(i.updatedAt)}</td>
                             <td data-label="Actions">
-                              <button
-                                type="button"
-                                className="button button-small button-primary"
-                                onClick={() => {
-                                  setSelectedInvestigation(i.id);
-                                  setTab("home");
-                                }}
-                              >
-                                {i.id === selectedInvestigation ? "Active Case" : "Activate"}
-                              </button>
+                              <div className="row-actions">
+                                <button
+                                  type="button"
+                                  className="button button-small button-primary"
+                                  onClick={() => {
+                                    setSelectedInvestigation(i.id);
+                                    setTab("home");
+                                  }}
+                                >
+                                  {i.id === selectedInvestigation ? "Active Case" : "Activate"}
+                                </button>
+                                <button
+                                  type="button"
+                                  className="button button-small button-danger"
+                                  onClick={() => setDeleteTarget(i)}
+                                  aria-label={`Delete investigation ${i.reference || i.name}`}
+                                >
+                                  Delete
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -3873,6 +3972,57 @@ export default function App() {
               >
                 Review Extracted Claims
               </button>
+            </div>
+          </aside>
+        </div>
+      )}
+
+      {deleteTarget && (
+        <div className="drawer-scrim" onClick={() => { if (!deleteBusy) setDeleteTarget(null); }}>
+          <aside
+            ref={deleteTrap}
+            className="drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Delete investigation confirmation"
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key === "Escape" && !deleteBusy) setDeleteTarget(null);
+            }}
+          >
+            <div className="drawer-head">
+              <div>
+                <span className="eyebrow">Destructive action</span>
+                <h2>Delete investigation</h2>
+              </div>
+              <button
+                type="button"
+                className="button button-small"
+                autoFocus
+                disabled={deleteBusy}
+                onClick={() => setDeleteTarget(null)}
+                aria-label="Cancel deletion"
+              >
+                Cancel
+              </button>
+            </div>
+            <div className="drawer-body">
+              <p className="panel-copy">
+                This permanently removes <strong>{deleteTarget.reference || deleteTarget.name}</strong> ({deleteTarget.name}) and its scoped evidence from
+                this local workspace: documents, extracted claims, review decisions, trace links and runs, findings, and stored evidence files.
+              </p>
+              <WarningBanner tone="critical" title="No undo in this prototype">
+                Deletion cannot be undone here. Exports or copies of this investigation that already exist outside the workspace are not affected. The
+                deletion action itself is written to the audit trail.
+              </WarningBanner>
+              <div className="row-actions">
+                <button type="button" className="button button-danger" disabled={deleteBusy} onClick={() => void performDeleteInvestigation()}>
+                  {deleteBusy ? "Deleting investigation…" : "Delete investigation and scoped evidence"}
+                </button>
+                <button type="button" className="button button-secondary" disabled={deleteBusy} onClick={() => setDeleteTarget(null)}>
+                  Keep investigation
+                </button>
+              </div>
             </div>
           </aside>
         </div>

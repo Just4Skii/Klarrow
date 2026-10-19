@@ -1,0 +1,4 @@
+DISPATCH NOTE
+DSP-6201 | 2026-10-08 | warehouse 2 | FL-44I2 | 900 units | Karoo Corner Stores | XYZ Logistics
+Transport note: ambient pallets, one pallet shrink-wrapped and sealed; proof of receipt to follow.
+Finished lot FL-44I2 allocated to dispatch bay 2; final customer receipt confirmation still outstanding at time of export.

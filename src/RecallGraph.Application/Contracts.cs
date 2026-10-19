@@ -188,6 +188,22 @@ public class InvestigationDto
     public int TraceRunCount { get; set; }
 }
 
+public class InvestigationDeleteResultDto
+{
+    public bool Deleted { get; set; }
+    public Guid InvestigationId { get; set; }
+    public string Reference { get; set; } = string.Empty;
+    public int DocumentsDeleted { get; set; }
+    public int FactsDeleted { get; set; }
+    public int ReviewEventsDeleted { get; set; }
+    public int TraceLinksDeleted { get; set; }
+    public int TraceRunsDeleted { get; set; }
+    public int FindingsDeleted { get; set; }
+    public int FilesDeleted { get; set; }
+    /// <summary>Known boundaries of the closest safe deletion this prototype can perform.</summary>
+    public List<string> Limitations { get; set; } = new();
+}
+
 public class SaveInvestigationDto
 {
     public string Name { get; set; } = string.Empty;

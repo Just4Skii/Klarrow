@@ -1,0 +1,5 @@
+BATCH PRODUCTION SHEET
+PB-2026-1102-X | 2026-10-01 | Bakery Line 2 | Peanut & oat bites 30 g
+Input consumed: PB-2026-1102-X | RM-3301 | 300 kg | peanut blend per recipe R-22
+Output packed: PB-2026-1102-X | FL-4412 | 2,400 units | packed 30 g | released to warehouse
+Operator notes: mixer M3 ran within parameters; routine QA checks passed.

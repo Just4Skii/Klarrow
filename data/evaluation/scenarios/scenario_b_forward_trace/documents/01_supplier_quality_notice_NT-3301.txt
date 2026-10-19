@@ -1,0 +1,19 @@
+From: quality@veldgroundnut.coop.example
+To: procurement@karoocrunch.example
+Date: 2026-10-06
+Subject: Quality notice - peanut consignment PN-3301 (aflatoxin screen)
+
+Dear Karoo Crunch team,
+
+Our laboratory screening of retained samples from consignment PN-3301 (raw peanuts, grade A) returned an aflatoxin result above our internal action level of 10 ug/kg.
+
+The consignment reached your site on 2026-09-25 and was booked in against your internal lot RM-3301 (our records show 500 kg). The remainder of the consignment remains in our warehouse under quarantine.
+
+Please quarantine any remaining stock of this lot and confirm the quantities already used in production, so that we can reconcile the affected volume.
+
+We will issue the test report and a corrective action plan within five working days.
+
+Regards,
+T. van Wyk
+Quality Assurance
+Veld Groundnut Growers Co-op

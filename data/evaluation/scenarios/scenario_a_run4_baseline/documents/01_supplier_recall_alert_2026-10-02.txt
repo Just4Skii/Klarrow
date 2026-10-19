@@ -1,0 +1,18 @@
+From: quality@kandyhighlandspice.example
+To: procurement@karoocrunch.example
+Subject: URGENT quality alert — ground cinnamon production batch CS-CIN-0915
+Date: 2026-10-02
+
+Dear Karoo Crunch team,
+
+Our laboratory analysis of retained samples from production batch CS-CIN-0915 (ground cinnamon, food grade) returned a lead result above our internal specification limit of 1.0 mg/kg.
+
+The consignment was shipped to four customers between 2026-09-14 and 2026-09-19. Two pallets were consigned to your site and booked in against your internal lot RM-0873 (our records show 320 kg).
+
+Please quarantine any remaining stock of this lot and confirm the quantities already used in production, so that we can reconcile the affected volume across our customer base.
+
+We will issue the certificate of analysis and a corrective action report within five working days.
+
+Regards,
+Quality Assurance
+Kandy Highland Spice Mill (Pvt) Ltd

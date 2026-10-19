@@ -1,0 +1,19 @@
+From: qa@sunlandcocoa.example
+To: procurement@karoocrunch.example
+Date: 2026-10-08
+Subject: Recall notice - cocoa powder production batch CB-2210 (moisture specification)
+
+Dear Karoo Crunch team,
+
+Our retained-sample testing of production batch CB-2210 (cocoa powder, fine grade) returned a moisture result above our internal specification limit of 4.5 percent.
+
+The consignment left our facility on 2026-09-30 and was booked in against your internal lot RM-7702 (our own paperwork recorded 300 kg net).
+
+Please hold any remaining stock of this lot and confirm the quantities already drawn into production, so that we can reconcile the affected volume together.
+
+We will issue the certificate of analysis and a corrective action report within five working days.
+
+Regards,
+L. Nkosi
+Quality Assurance
+Sunland Cocoa Trading (Pvt) Ltd

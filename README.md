@@ -98,7 +98,7 @@ When configured, application routes require the `X-Api-Key` header except `/api/
 Klarrow includes an integration test harness using temporary SQLite databases and isolated storage roots. A GitHub Actions workflow runs the .NET build/tests and frontend lint/build on pushes and pull requests. Check the repository’s Actions tab for the latest run status.
 
 ```powershell
-# Run the 40 automated integration tests
+# Run the 43 automated integration tests
 dotnet test
 
 # Build and lint frontend
@@ -107,7 +107,7 @@ npm run lint
 npm run build
 ```
 
-**Latest recorded test results (40/40 .NET tests; 25/25 Playwright tests):**
+**Latest recorded test results (43/43 .NET tests; 25/25 Playwright tests):**
 - Document upload -> relationship proposal generation -> operator confirmation -> confirmed trace scope.
 - Strict isolation of Candidate links from Confirmed finished lot and customer exposure.
 - Invalidation cascade demoting confirmed links when an underlying supporting fact is rejected or edited.
@@ -119,6 +119,15 @@ npm run build
 - Near-match typo proposals (`O` vs `0`) requiring human review without auto-merging.
 - CSV formula-trigger sanitization and HTML provenance report generation.
 - Five-sheet XLSX workbook export, with worksheet tables, frozen headers, wrapped evidence cells and print layout checks.
+- Malformed model-response rows are skipped or coerced without discarding the valid extracted facts (regression test).
+
+The repository also contains a scenario evaluation suite (`scripts/evaluation/run-scenario.mjs`) that
+runs three authored scenarios in deterministic and llama modes against locked, hash-verified ground
+truth. Latest consolidated run `eval-dev-20261019-final`: deterministic mode passed all 13 checks on
+all three scenarios; llama mode passed A and B and scored 11/13 on the fragmented-evidence scenario
+where extra candidate links remained in `Candidate` state. See
+[`docs/evaluation/model-value-evaluation.md`](docs/evaluation/model-value-evaluation.md) and
+`results/evaluation/model-value-evaluation.json`.
 
 ---
 
@@ -135,6 +144,7 @@ Detailed operational and technical reports are available in [`docs/pitch-readine
 8. **[Run 4 Benchmark Report](docs/benchmark-run3.md):** Current single-scenario observed results; Run 3 is preserved as a historical appendix.
 9. **[Competition Verification](docs/pitch-readiness/competition-verification.md):** Official event page evidence, deadline, eligibility and unpublished/blocked details.
 10. **[Validation Log](docs/pitch-readiness/validation-log.md):** Commands and observed pass/fail counts for the current tree.
+11. **[Model-Value Evaluation](docs/evaluation/model-value-evaluation.md):** Deterministic vs local-Llama results across three authored scenarios (run `eval-dev-20261019-final`), including the provider-hardening disclosure.
 
 ---
 
@@ -142,6 +152,6 @@ Detailed operational and technical reports are available in [`docs/pitch-readine
 
 1. **Not Automated Safety Clearance:** Klarrow reconstructs what ingested records support; it does not determine whether food is safe or replace a certified food-safety sanitarian.
 2. **Optical Character Recognition (OCR):** Degraded raster scans and handwritten logs are retained without OCR. Text-searchable PDFs, spreadsheets, and structured text files are fully parsed.
-3. **Local LLM Performance:** AI extraction requires a running local Ollama instance with `llama3.2:3b`. When Ollama is unreachable, the system gracefully falls back to deterministic structured parsers.
-4. **Benchmark Scope:** The current benchmark is a single authored seven-document fictional scenario with one local model and one operator. It is not an accuracy, time-savings, customer-demand or real-document study.
+3. **Local LLM Performance:** AI extraction requires a running local Ollama instance with `llama3.2:3b`. When Ollama is unreachable, the system gracefully falls back to deterministic structured parsers. In llama mode a small 3B model can add extra candidate links on fragmented evidence (observed in the C scenario of the evaluation suite); candidates never enter confirmed scope without human review.
+4. **Benchmark Scope:** The primary benchmark is one authored seven-document fictional scenario (Run 4), extended by a three-scenario evaluation suite comparing deterministic and llama extraction. Both use authored fictional documents, one small local model and one operator. None of this is an accuracy, time-savings, customer-demand or real-document study.
 5. **Early Commercial Validation:** Klarrow is an engineering-verified prototype with an automated acceptance test suite; it has not completed formal multi-site commercial pilot contracts or independent customer validation.

@@ -58,4 +58,37 @@ The separate browser E2E flow from the closeout used a fresh seven-document / 35
 - OCR for scanned images, RBAC/SSO, production deployment/monitoring, real customer/practitioner validation and independent real-document evaluation are not complete.
 - The recorded hosted run verifies the cleanup commit only. Future commits should be judged from their own current Actions result; a green build is not a security audit or deployment approval.
 
+## 2026-10-19 addendum — evaluation suite (deterministic vs Llama)
+
+**Scope:** Tasks 1–2 of the submission plan on the current working tree. Three authored scenarios with
+locked, manifest-hash-verified ground truth, executed by `scripts/evaluation/run-scenario.mjs` in both
+extraction modes; consolidated run id `eval-dev-20261019-final` (3 scenarios × 2 modes = 6 runs; 13
+boolean checks per run against the locked expectations).
+
+| Run | Verdict | Notes |
+|---|---|---|
+| A run-4 baseline / deterministic | PASS 13/13 | 35 parser facts; 0 AI rows by design |
+| A run-4 baseline / llama | PASS 13/13 | 50 facts (15 AI); claim recall 6/6 |
+| B forward trace / deterministic | PASS 13/13 | 37 parser facts |
+| B forward trace / llama | PASS 13/13 | 47 facts (10 AI); claim recall 3/5 |
+| C fragmented evidence / deterministic | PASS 13/13 | 35 parser facts |
+| C fragmented evidence / llama | FAIL 11/13 | 47 facts (12 AI); claim recall 1/4; 3 extra `Candidate` links, nothing auto-confirmed |
+
+- .NET test suite at this revision: **43 passed, 0 failed** (the Run 4-era 40 tests plus two earlier
+  additions and one new provider-parsing regression test).
+- **Provider hardening disclosure:** the first llama executions (`eval-dev-20261019-llama-1`,
+  `eval-dev-20261019-llama-2`) failed scenario B extraction with `Fact rawValue must be a string.` —
+  the model returned a non-string `rawValue` and the provider rejected the whole response, aborting
+  the run with zero AI facts. `LlamaProvider.TryParse` was hardened to skip malformed rows and coerce
+  numeric/boolean `rawValue` to literal text; grounding, review and confirmation rules are unchanged,
+  and the failure mode is now covered by a regression test. All post-fix results are the ones
+  tabulated above; pre-fix run ids are retained for audit.
+- Report and artefacts: `docs/evaluation/model-value-evaluation.md`;
+  `results/evaluation/model-value-evaluation.json` / `.csv`; per-run metrics, raw run records and API
+  logs under `results/evaluation/runs/eval-dev-20261019-final/`.
+- **What this does not establish:** three authored scenarios, one small local model, no
+  accuracy/precision/recall study, no time-savings measurement, no real-document evidence. Scenario C
+  shows llama-mode candidate noise on fragmented evidence; it never enters confirmed scope without
+  human review.
+
 **Decision:** suitable for controlled prototype demonstration and competition submission, subject to rehearsing the exact submitted build. Not suitable for production or regulatory reliance.

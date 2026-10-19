@@ -1,0 +1,5 @@
+BATCH PRODUCTION SHEET
+PB-2026-1012-A | 2026-09-25 | Bakery Line 1 | Oat & cinnamon bites 120 g
+Input consumed: PB-2026-1012-A | RM-0873 | 180 kg | cinnamon blend per recipe R-11
+Output packed: PB-2026-1012-A | FL-1021A | 3,600 units | packed 120 g | released to warehouse
+Operator notes: mixer M2 ran within parameters; two short stoppages for film roll changes; routine QA checks passed.

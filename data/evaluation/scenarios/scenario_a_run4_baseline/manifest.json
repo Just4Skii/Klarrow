@@ -1,0 +1,27 @@
+{
+  "scenarioId": "scenario_a_run4_baseline",
+  "title": "Run 4 baseline - Karoo Crunch cinnamon lead alert (RM-0873)",
+  "lockedAt": "2026-10-17",
+  "provenance": {
+    "description": "Byte-identical copies of the seven authored synthetic documents used in the frozen Run 4 end-to-end benchmark. Ground truth was pre-registered by hand before the live run and later cross-checked against the frozen Run 4 artefacts without modification.",
+    "sourceRunRoot": "D:\\code randoms\\Recall-local\\run4",
+    "sourceInvestigationId": "872650af-899f-437f-81f7-b74be2ad65b4",
+    "sourceExtractionRunId": "b4b095ba-2dcb-453e-a3fb-045699138f82",
+    "sourceTraceRunId": "b88a5916-59fa-4e03-aa45-880bae68112f",
+    "sourceAiProvider": "OpenAI-compatible Llama",
+    "sourceAiModel": "llama3.2:3b",
+    "copyVerifiedOn": "2026-10-19",
+    "copyMethod": "SHA-256 equality against the Run 4 originals"
+  },
+  "documents": [
+    { "fileName": "01_supplier_recall_alert_2026-10-02.txt", "sizeBytes": 921, "sha256": "2587d582af17d1304658bc9f81ab70de460adadbd37f09cebc3c3964b3223897", "role": "context-only prose" },
+    { "fileName": "02_goods_received_note_GRN-77412.txt", "sizeBytes": 365, "sha256": "af322b0eda26d47f732b9383e2f58f9f3f8490d82e1df68ecf5fc426e1ecfc62", "role": "structured receipt" },
+    { "fileName": "03_cinnamon_stock_ledger_sep_2026.csv", "sizeBytes": 256, "sha256": "4dded2b4a49b10add012ba2744f1cfeba28f87786959a6b2eba01fd3ceef84d2", "role": "structured ledger with confusable-code typo row" },
+    { "fileName": "04_batch_sheet_PB-2026-1012-A.txt", "sizeBytes": 390, "sha256": "b30df6edf6de4432600f99bc6e4ab2e46007e9ddc709a41395a1d530ea023a20", "role": "structured batch sheet" },
+    { "fileName": "05_production_log_PB-2026-1013-B.txt", "sizeBytes": 332, "sha256": "7e516f6d2cb110a2a36f27fbe49fba438755f7d31b9ecd6cd94d077ea32fa48f", "role": "structured production log" },
+    { "fileName": "06_dispatch_note_DSP-5011.txt", "sizeBytes": 223, "sha256": "8ccb6669154945993febcc0f829c948a5c539c2b358238bce510df82ffbd72bf", "role": "structured dispatch" },
+    { "fileName": "07_dispatch_note_DSP-5012.txt", "sizeBytes": 224, "sha256": "5ebfc798cfb294354bc035695e2adebf11cec6aefc9c3102cffcb4b6454c283b", "role": "structured dispatch" }
+  ],
+  "userFacingDisclosure": "All documents are fictional and were authored for this evaluation. The Run 4 workspace is explicitly a pilot workspace containing no synthetic-tagged evidence; the workspace remains demo/pilot material and is not certified for regulatory clearance.",
+  "notes": "Do not modify these files. Any change invalidates the locked ground truth reference of the evaluation suite."
+}

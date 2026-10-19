@@ -1,0 +1,139 @@
+{
+  "scenarioId": "scenario_b_forward_trace",
+  "title": "Forward trace - peanut aflatoxin notice (RM-3301)",
+  "lockedAt": "2026-10-19",
+  "lockedProvenance": "Authored and locked before the first evaluation execution of this scenario. Every expectation below was derived by hand from the document text and the deterministic engine rules at the time of authoring (RelationshipService regexes and supplier/customer extraction, MatchService near-match keys, GapEngine thresholds, TraceService scope separation and mass balance).",
+  "investigation": {
+    "name": "Peanut aflatoxin notice - forward trace (eval B)",
+    "reference": "EVAL-B-FWD",
+    "suspectLotType": "raw-lot",
+    "suspectLotId": "RM-3301"
+  },
+  "requiredFacts": {
+    "tokens": [
+      "RM-3301",
+      "PB-2026-1102-X",
+      "PB-2026-1103-Y",
+      "FL-4412",
+      "FL-4413",
+      "FL-44I2",
+      "Veld Groundnut Growers Co-op",
+      "Drakensberg Grocers (Pty) Ltd",
+      "Karoo Corner Stores",
+      "CRN-2210",
+      "PN-3301"
+    ],
+    "quantities": [
+      { "value": 500, "unit": "kg" },
+      { "value": 300, "unit": "kg" },
+      { "value": 150, "unit": "kg" },
+      { "value": 50, "unit": "kg" },
+      { "value": 2400, "unit": "units" },
+      { "value": 1600, "unit": "units" },
+      { "value": 1500, "unit": "units" },
+      { "value": 900, "unit": "units" }
+    ],
+    "verbatimTraps": [
+      {
+        "fileName": "07_dispatch_note_DSP-6201.txt",
+        "contains": "FL-44I2",
+        "mustRemainVerbatim": true,
+        "note": "The I/1 confusable variant must be stored verbatim and never silently rewritten to FL-4412."
+      },
+      {
+        "fileName": "03_peanut_stock_ledger_oct_2026.csv",
+        "contains": "credit-return",
+        "mustRemainVerbatim": true,
+        "note": "The credit-return row must be captured as a fact (quantity 50 kg) but must never become a consumption relationship."
+      }
+    ]
+  },
+  "requiredLinks": [
+    { "linkKind": "supplier_delivery", "fromType": "supplier", "fromId": "Veld Groundnut Growers Co-op", "toType": "raw-lot", "toId": "RM-3301", "quantity": 500, "quantityUnit": "kg", "eventDate": "2026-09-25", "finalState": "Confirmed" },
+    { "linkKind": "raw_to_batch", "fromType": "raw-lot", "fromId": "RM-3301", "toType": "production-batch", "toId": "PB-2026-1102-X", "quantity": 300, "quantityUnit": "kg", "finalState": "Confirmed" },
+    { "linkKind": "raw_to_batch", "fromType": "raw-lot", "fromId": "RM-3301", "toType": "production-batch", "toId": "PB-2026-1103-Y", "quantity": 150, "quantityUnit": "kg", "finalState": "Confirmed" },
+    { "linkKind": "batch_to_finished", "fromType": "production-batch", "fromId": "PB-2026-1102-X", "toType": "finished-lot", "toId": "FL-4412", "quantity": 2400, "quantityUnit": "units", "finalState": "Confirmed" },
+    { "linkKind": "batch_to_finished", "fromType": "production-batch", "fromId": "PB-2026-1103-Y", "toType": "finished-lot", "toId": "FL-4413", "quantity": 1600, "quantityUnit": "units", "finalState": "Confirmed" },
+    { "linkKind": "finished_to_dispatch", "fromType": "finished-lot", "fromId": "FL-4412", "toType": "customer", "toId": "Drakensberg Grocers (Pty) Ltd", "quantity": 1500, "quantityUnit": "units", "finalState": "Confirmed" },
+    { "linkKind": "finished_to_dispatch", "fromType": "finished-lot", "fromId": "FL-44I2", "toType": "customer", "toId": "Karoo Corner Stores", "quantity": 900, "quantityUnit": "units", "finalState": "Candidate" }
+  ],
+  "expectedNoiseLinks": [],
+  "forbiddenLinkPatterns": [
+    { "description": "The credit-return row must not create any relationship of any kind.", "evidenceContainsAny": ["credit-return", "CRN-2210"], "endpointKinds": ["raw_to_batch", "supplier_delivery", "finished_to_dispatch", "batch_to_finished", "rework_input"] },
+    { "description": "The production log output line must not create a dispatch link with a line-fragment pseudo-customer (this scenario avoids the Run 4 wording that triggered it; if a link appears with toId containing 'Run 1 output', it is a regression).", "toIdContainsAny": ["Run 1 output", "awaiting warehouse"], "endpointKinds": ["finished_to_dispatch"] },
+    { "description": "The supplier quality notice is context only and must not contribute any relationship.", "evidenceContainsAny": ["10 ug/kg", "quarantine any remaining stock"], "endpointKinds": ["supplier_delivery", "raw_to_batch"] }
+  ],
+  "expectedMatchProposals": [
+    {
+      "pairUnordered": ["FL-4412", "FL-44I2"],
+      "stableKey": "near-match:FL-4412:FL-44I2",
+      "score": 0.5,
+      "scoreKind": "heuristic-not-calibrated",
+      "initialState": "Candidate",
+      "finalStateAfterScript": "Deferred"
+    }
+  ],
+  "forbiddenMatchPairs": [
+    { "pairUnordered": ["RM-3301", "PN-3301"], "note": "DN-/supplier codes are not lot codes; the match service only scans RM/FL/PB-prefixed evidence codes - a PN pair must never surface." }
+  ],
+  "expectedFindings": {
+    "preReviewKindsWithEntity": [
+      { "kind": "quantity-mismatch", "relatedEntityType": "raw-lot", "relatedEntityId": "RM-3301" },
+      { "kind": "unreviewed-candidates" }
+    ],
+    "mustNotExistKinds": [
+      "missing-upstream-evidence",
+      "ambiguous-identifier"
+    ],
+    "note": "Quantity-mismatch is expected and correct: received 500 kg vs consumed 450 kg (300+150). The 50 kg credit-return is deliberately NOT treated as consumption; the mismatch plus the return fact is the honest signal. No ambiguous-identifier gap finding is expected because the GapEngine identifier check scans raw lots only and FL-4412/FL-44I2 is a finished-lot pair; that ambiguity is surfaced as a match proposal instead. This asymmetry is pre-registered here, not discovered later."
+  },
+  "expectedAiClaims": [
+    { "subjectContains": "RM-3301", "quantity": 500, "unit": "kg" },
+    { "subjectContains": "PB-2026-1102-X", "quantity": 300, "unit": "kg" },
+    { "subjectContains": "DSP-6202", "quantity": 1500, "unit": "units" },
+    { "subjectContains": "DSP-6201", "quantity": 900, "unit": "units" },
+    { "subjectContains": "RM-3301", "quantity": 50, "unit": "kg", "note": "The credit-return quantity must appear as a captured fact; it must not appear in any link." }
+  ],
+  "expectedAiClaimNote": "Ideal structured interpretation rows for Llama-mode extraction; scored only in llama mode (null in deterministic-only mode).",
+  "decisionScript": {
+    "confirmLinks": [
+      { "linkKind": "supplier_delivery", "fromId": "Veld Groundnut Growers Co-op", "toId": "RM-3301" },
+      { "linkKind": "raw_to_batch", "fromId": "RM-3301", "toId": "PB-2026-1102-X" },
+      { "linkKind": "raw_to_batch", "fromId": "RM-3301", "toId": "PB-2026-1103-Y" },
+      { "linkKind": "batch_to_finished", "fromId": "PB-2026-1102-X", "toId": "FL-4412" },
+      { "linkKind": "batch_to_finished", "fromId": "PB-2026-1103-Y", "toId": "FL-4413" },
+      { "linkKind": "finished_to_dispatch", "fromId": "FL-4412", "toId": "Drakensberg Grocers (Pty) Ltd" }
+    ],
+    "rejectLinks": [],
+    "matchDecisions": [
+      { "pairUnordered": ["FL-4412", "FL-44I2"], "action": "defer", "reason": "Evaluation B: finish-lot variant identity left unconfirmed; dispatch 07 remains candidate." }
+    ],
+    "regenerateAfterAlias": false,
+    "traces": [
+      { "label": "preReviewForward", "selectedType": "raw-lot", "selectedId": "RM-3301", "direction": "forward", "traceBeforeDecisions": true },
+      { "label": "postDecisionsBoth", "selectedType": "raw-lot", "selectedId": "RM-3301", "direction": "both" }
+    ]
+  },
+  "expectedTrace": {
+    "preReviewForward": {
+      "confirmedFinishedLots": [],
+      "confirmedCustomers": [],
+      "possiblyReachableFinishedLots": ["FL-4412", "FL-4413"],
+      "possiblyReachableCustomers": ["Drakensberg Grocers (Pty) Ltd"],
+      "mustNotReach": ["FL-44I2", "Karoo Corner Stores"],
+      "massBalanceStatus": "insufficient",
+      "stateCounts": { "Confirmed": 0, "Candidate": 5 }
+    },
+    "postDecisionsBoth": {
+      "confirmedFinishedLots": ["FL-4412", "FL-4413"],
+      "confirmedCustomers": ["Drakensberg Grocers (Pty) Ltd"],
+      "possiblyReachableFinishedLots": [],
+      "possiblyReachableCustomers": [],
+      "mustNotReach": ["FL-44I2", "Karoo Corner Stores"],
+      "massBalanceStatus": "insufficient",
+      "massBalanceInput": { "value": 500, "unit": "kg" },
+      "massBalanceOutput": { "value": 5500, "unit": "units" },
+      "stateCounts": { "Confirmed": 6, "Candidate": 0 }
+    }
+  }
+}

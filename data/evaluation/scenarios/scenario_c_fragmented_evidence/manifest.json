@@ -1,0 +1,20 @@
+{
+  "scenarioId": "scenario_c_fragmented_evidence",
+  "title": "Fragmented evidence - cocoa moisture recall (RM-7702 / RM-77O2 / RM-07702)",
+  "lockedAt": "2026-10-19",
+  "provenance": {
+    "description": "Authored synthetic evidence for the evaluation suite. Expectations locked before the first execution of this scenario, derived by hand from the document text and the engine's deterministic rules (RelationshipService, MatchService, GapEngine, TraceService).",
+    "authoredBy": "Klarrow evaluation suite",
+    "copyVerifiedOn": "2026-10-19"
+  },
+  "documents": [
+    { "fileName": "01_supplier_recall_notice_CC-2210.txt", "sizeBytes": 831, "sha256": "3988e5b666d7e4a77c248ca313e8a2215238cdf5110da31052d4a633c75423db", "role": "context-only prose (also states the supplier's 300 kg figure)" },
+    { "fileName": "02_goods_received_note_GRN-90511.txt", "sizeBytes": 304, "sha256": "71fe3ed44b1daf375928b1ba58732bf13c3fd0de0e85b448f476eb77e60613be", "role": "structured receipt, 320 kg (conflicts with supplier note)" },
+    { "fileName": "03_supplier_delivery_note_DN-90511.txt", "sizeBytes": 215, "sha256": "fbe8a3e9450a0fabd522fbdde1d7d6dab5320a53fc082ba6264f2a76ae187713", "role": "supplier's own note, 300 kg, no internal lot code" },
+    { "fileName": "04_cocoa_stock_ledger_oct_2026.csv", "sizeBytes": 339, "sha256": "f94bd83e0fade6379d3d8faf962c7c7411a0af49f4639a287329eedfc8906c56", "role": "structured ledger with O/0 variant, leading-zero variant and credit-return row; revised 2026-10-19 before the first execution of this scenario - one sample-issue row added so the extracted fact subject is RM-77O2 itself, making the confusable code discoverable by the deterministic match and gap checks" },
+    { "fileName": "05_batch_sheet_PB-2026-1205-C.txt", "sizeBytes": 328, "sha256": "3c811a69556e7fc9f24633c318a104d33096c93adbe169fa18bfbccb39885a2f", "role": "structured batch sheet (RM-77O2 chain)" },
+    { "fileName": "06_batch_sheet_PB-2026-1206-D.txt", "sizeBytes": 307, "sha256": "3734c46874bb7cef7f5ecd9aaef3b068c9e85042cb5e5c369a9f48a38907f661", "role": "structured batch sheet (RM-07702 chain; no dispatch anywhere in this scenario)" }
+  ],
+  "userFacingDisclosure": "All names, lots and quantities are fictional and were authored for this evaluation.",
+  "notes": "Do not modify these files. Any change invalidates the locked ground truth reference of the evaluation suite. Revisions made before the first execution are recorded per file with updated hashes; no run results had been observed."
+}

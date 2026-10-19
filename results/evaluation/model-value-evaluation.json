@@ -1,0 +1,1496 @@
+{
+  "schemaVersion": "1.0",
+  "runId": "eval-dev-20261019-final",
+  "generatedAt": "2026-10-18T19:01:43.989Z",
+  "entries": [
+    {
+      "scenario": "scenario_a_run4_baseline",
+      "deterministicOnly": {
+        "verdict": {
+          "checksPassed": 13,
+          "checksTotal": 13,
+          "passed": true
+        },
+        "provider": {
+          "requestedMode": "deterministic_only",
+          "statusModeBefore": "deterministic_only",
+          "statusModeAfter": "deterministic_only",
+          "provider": "DeterministicParser",
+          "modelId": "none",
+          "extractionRunStatus": "completed-deterministic",
+          "documentsProcessed": 7,
+          "factsCreatedByExtraction": 0,
+          "isDemo": false
+        },
+        "facts": {
+          "total": 35,
+          "byExtractionMethod": {
+            "deterministic-parser": 35
+          },
+          "aiRowCount": 0,
+          "aiRowsWithQuantity": 0,
+          "aiRowsWithSubjectAndObject": 0,
+          "tokenRecallRate": 1,
+          "quantityRecallRate": 1,
+          "locatorPresentRate": 1,
+          "missingTokens": []
+        },
+        "links": {
+          "totalFinal": 8,
+          "requiredMatched": 7,
+          "requiredTotal": 7,
+          "missingRequired": [],
+          "expectedNoiseMatched": [
+            {
+              "tuple": "finished_to_dispatch|fl-1034c|run 2 output: pb-2026-1013-b",
+              "state": "Rejected",
+              "stateOk": true
+            }
+          ],
+          "unexpectedLinks": [],
+          "linkCountExpected": 8
+        },
+        "matches": {
+          "totalFinal": 1,
+          "expected": [
+            {
+              "pairKey": "RM-0873::RM-O873",
+              "found": true,
+              "state": "Deferred",
+              "stateOk": true
+            }
+          ],
+          "forbiddenPairsFound": []
+        },
+        "findings": {
+          "preReviewOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "dad21340-492f-4947-8ed7-d14ad43a9e6e",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-0873",
+              "status": "Open",
+              "title": "Ambiguous identifier needs review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-0873",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "finalOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "dad21340-492f-4947-8ed7-d14ad43a9e6e",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-0873",
+              "status": "Open",
+              "title": "Ambiguous identifier needs review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-0873",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "expectedPreReview": [
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-0873",
+              "found": true
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-0873",
+              "found": true
+            },
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": null,
+              "found": true
+            }
+          ],
+          "expectedPostAlias": null,
+          "mustNotExist": [
+            {
+              "kind": "missing-upstream-evidence",
+              "violated": false
+            }
+          ]
+        },
+        "traces": {
+          "preReview": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [],
+              "confirmedCustomers": [],
+              "possibleFinishedLots": [
+                "FL-1021A"
+              ],
+              "possibleCustomers": [
+                "Bosveld Tuckshop Distributors",
+                "Highveld Retail Group (Pty) Ltd"
+              ],
+              "nodes": [
+                "raw-lot:RM-0873",
+                "production-batch:PB-2026-1012-A",
+                "supplier:Kandy Highland Spice Mill (Pvt) Ltd",
+                "finished-lot:FL-1021A",
+                "customer:Bosveld Tuckshop Distributors",
+                "customer:Highveld Retail Group (Pty) Ltd"
+              ],
+              "stateCounts": {
+                "Candidate": 5,
+                "Confirmed": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": null,
+                "inputUnit": "",
+                "outputTotal": null,
+                "outputUnit": "",
+                "notes": "No quantity-bearing confirmed trace links were recorded in this path."
+              }
+            }
+          },
+          "postDecisions": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [
+                "FL-1021A"
+              ],
+              "confirmedCustomers": [
+                "Bosveld Tuckshop Distributors",
+                "Highveld Retail Group (Pty) Ltd"
+              ],
+              "possibleFinishedLots": [],
+              "possibleCustomers": [],
+              "nodes": [
+                "raw-lot:RM-0873",
+                "production-batch:PB-2026-1012-A",
+                "supplier:Kandy Highland Spice Mill (Pvt) Ltd",
+                "finished-lot:FL-1021A",
+                "customer:Bosveld Tuckshop Distributors",
+                "customer:Highveld Retail Group (Pty) Ltd"
+              ],
+              "stateCounts": {
+                "Confirmed": 5,
+                "Candidate": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": 320,
+                "inputUnit": "kg",
+                "outputTotal": 6600,
+                "outputUnit": "units",
+                "notes": "Unit conversion required: input is recorded in 'kg' while output is recorded in 'units'."
+              }
+            }
+          }
+        },
+        "aiClaimRecallRate": null
+      },
+      "llama": {
+        "verdict": {
+          "checksPassed": 13,
+          "checksTotal": 13,
+          "passed": true
+        },
+        "provider": {
+          "requestedMode": "llama",
+          "statusModeBefore": "configured",
+          "statusModeAfter": "configured",
+          "provider": "OpenAI-compatible Llama",
+          "modelId": "llama3.2:3b",
+          "extractionRunStatus": "completed",
+          "documentsProcessed": 7,
+          "factsCreatedByExtraction": 15,
+          "isDemo": false
+        },
+        "facts": {
+          "total": 50,
+          "byExtractionMethod": {
+            "ai-extraction": 15,
+            "deterministic-parser": 35
+          },
+          "aiRowCount": 15,
+          "aiRowsWithQuantity": 8,
+          "aiRowsWithSubjectAndObject": 3,
+          "tokenRecallRate": 1,
+          "quantityRecallRate": 1,
+          "locatorPresentRate": 1,
+          "missingTokens": []
+        },
+        "links": {
+          "totalFinal": 8,
+          "requiredMatched": 7,
+          "requiredTotal": 7,
+          "missingRequired": [],
+          "expectedNoiseMatched": [
+            {
+              "tuple": "finished_to_dispatch|fl-1034c|run 2 output: pb-2026-1013-b",
+              "state": "Rejected",
+              "stateOk": true
+            }
+          ],
+          "unexpectedLinks": [],
+          "linkCountExpected": 8
+        },
+        "matches": {
+          "totalFinal": 1,
+          "expected": [
+            {
+              "pairKey": "RM-0873::RM-O873",
+              "found": true,
+              "state": "Deferred",
+              "stateOk": true
+            }
+          ],
+          "forbiddenPairsFound": []
+        },
+        "findings": {
+          "preReviewOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "42f009f6-9721-47b9-a4e0-e83e049bfa03",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-0873",
+              "status": "Open",
+              "title": "Ambiguous identifier needs review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-0873",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "finalOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "42f009f6-9721-47b9-a4e0-e83e049bfa03",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-0873",
+              "status": "Open",
+              "title": "Ambiguous identifier needs review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-0873",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "expectedPreReview": [
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-0873",
+              "found": true
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-0873",
+              "found": true
+            },
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": null,
+              "found": true
+            }
+          ],
+          "expectedPostAlias": null,
+          "mustNotExist": [
+            {
+              "kind": "missing-upstream-evidence",
+              "violated": false
+            }
+          ]
+        },
+        "traces": {
+          "preReview": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [],
+              "confirmedCustomers": [],
+              "possibleFinishedLots": [
+                "FL-1021A"
+              ],
+              "possibleCustomers": [
+                "Bosveld Tuckshop Distributors",
+                "Highveld Retail Group (Pty) Ltd"
+              ],
+              "nodes": [
+                "raw-lot:RM-0873",
+                "production-batch:PB-2026-1012-A",
+                "supplier:Kandy Highland Spice Mill (Pvt) Ltd",
+                "finished-lot:FL-1021A",
+                "customer:Bosveld Tuckshop Distributors",
+                "customer:Highveld Retail Group (Pty) Ltd"
+              ],
+              "stateCounts": {
+                "Candidate": 5,
+                "Confirmed": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": null,
+                "inputUnit": "",
+                "outputTotal": null,
+                "outputUnit": "",
+                "notes": "No quantity-bearing confirmed trace links were recorded in this path."
+              }
+            }
+          },
+          "postDecisions": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [
+                "FL-1021A"
+              ],
+              "confirmedCustomers": [
+                "Bosveld Tuckshop Distributors",
+                "Highveld Retail Group (Pty) Ltd"
+              ],
+              "possibleFinishedLots": [],
+              "possibleCustomers": [],
+              "nodes": [
+                "raw-lot:RM-0873",
+                "production-batch:PB-2026-1012-A",
+                "supplier:Kandy Highland Spice Mill (Pvt) Ltd",
+                "finished-lot:FL-1021A",
+                "customer:Bosveld Tuckshop Distributors",
+                "customer:Highveld Retail Group (Pty) Ltd"
+              ],
+              "stateCounts": {
+                "Confirmed": 5,
+                "Candidate": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": 320,
+                "inputUnit": "kg",
+                "outputTotal": 6600,
+                "outputUnit": "units",
+                "notes": "Unit conversion required: input is recorded in 'kg' while output is recorded in 'units'."
+              }
+            }
+          }
+        },
+        "aiClaimRecallRate": 1
+      },
+      "aiAddedValue": {
+        "aiExtractionRows": 15,
+        "aiRowsWithQuantity": 8,
+        "aiRowsWithSubjectAndObject": 3,
+        "aiClaimRecallRate": 1,
+        "tokensOnlyInLlamaMode": [],
+        "tokensOnlyInDeterministicMode": [],
+        "deterministicVerdict": {
+          "checksPassed": 13,
+          "checksTotal": 13,
+          "passed": true
+        },
+        "llamaVerdict": {
+          "checksPassed": 13,
+          "checksTotal": 13,
+          "passed": true
+        },
+        "llamaUnexpectedLinks": [],
+        "deterministicUnexpectedLinks": [],
+        "note": "Deterministic mode produces no AI-extraction rows by design (EXTRACTION_MODE=deterministic_only); AI claim recall is null there."
+      }
+    },
+    {
+      "scenario": "scenario_b_forward_trace",
+      "deterministicOnly": {
+        "verdict": {
+          "checksPassed": 13,
+          "checksTotal": 13,
+          "passed": true
+        },
+        "provider": {
+          "requestedMode": "deterministic_only",
+          "statusModeBefore": "deterministic_only",
+          "statusModeAfter": "deterministic_only",
+          "provider": "DeterministicParser",
+          "modelId": "none",
+          "extractionRunStatus": "completed-deterministic",
+          "documentsProcessed": 7,
+          "factsCreatedByExtraction": 0,
+          "isDemo": false
+        },
+        "facts": {
+          "total": 37,
+          "byExtractionMethod": {
+            "deterministic-parser": 37
+          },
+          "aiRowCount": 0,
+          "aiRowsWithQuantity": 0,
+          "aiRowsWithSubjectAndObject": 0,
+          "tokenRecallRate": 1,
+          "quantityRecallRate": 1,
+          "locatorPresentRate": 1,
+          "missingTokens": []
+        },
+        "links": {
+          "totalFinal": 7,
+          "requiredMatched": 7,
+          "requiredTotal": 7,
+          "missingRequired": [],
+          "expectedNoiseMatched": [],
+          "unexpectedLinks": [],
+          "linkCountExpected": 7
+        },
+        "matches": {
+          "totalFinal": 1,
+          "expected": [
+            {
+              "pairKey": "FL-4412::FL-44I2",
+              "found": true,
+              "state": "Deferred",
+              "stateOk": true
+            }
+          ],
+          "forbiddenPairsFound": []
+        },
+        "findings": {
+          "preReviewOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "9ebbe630-ece6-48d9-a464-9045f411838b",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-3301",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "finalOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "9ebbe630-ece6-48d9-a464-9045f411838b",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-3301",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "expectedPreReview": [
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-3301",
+              "found": true
+            },
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": null,
+              "found": true
+            }
+          ],
+          "expectedPostAlias": null,
+          "mustNotExist": [
+            {
+              "kind": "missing-upstream-evidence",
+              "violated": false
+            },
+            {
+              "kind": "ambiguous-identifier",
+              "violated": false
+            }
+          ]
+        },
+        "traces": {
+          "preReviewForward": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [],
+              "confirmedCustomers": [],
+              "possibleFinishedLots": [
+                "FL-4412",
+                "FL-4413"
+              ],
+              "possibleCustomers": [
+                "Drakensberg Grocers (Pty) Ltd"
+              ],
+              "nodes": [
+                "raw-lot:RM-3301",
+                "production-batch:PB-2026-1102-X",
+                "production-batch:PB-2026-1103-Y",
+                "finished-lot:FL-4412",
+                "finished-lot:FL-4413",
+                "customer:Drakensberg Grocers (Pty) Ltd"
+              ],
+              "stateCounts": {
+                "Candidate": 5,
+                "Confirmed": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": null,
+                "inputUnit": "",
+                "outputTotal": null,
+                "outputUnit": "",
+                "notes": "No quantity-bearing confirmed trace links were recorded in this path."
+              }
+            }
+          },
+          "postDecisionsBoth": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [
+                "FL-4412",
+                "FL-4413"
+              ],
+              "confirmedCustomers": [
+                "Drakensberg Grocers (Pty) Ltd"
+              ],
+              "possibleFinishedLots": [],
+              "possibleCustomers": [],
+              "nodes": [
+                "raw-lot:RM-3301",
+                "production-batch:PB-2026-1102-X",
+                "production-batch:PB-2026-1103-Y",
+                "supplier:Veld Groundnut Growers Co-op",
+                "finished-lot:FL-4412",
+                "finished-lot:FL-4413",
+                "customer:Drakensberg Grocers (Pty) Ltd"
+              ],
+              "stateCounts": {
+                "Confirmed": 6,
+                "Candidate": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": 500,
+                "inputUnit": "kg",
+                "outputTotal": 5500,
+                "outputUnit": "units",
+                "notes": "Unit conversion required: input is recorded in 'kg' while output is recorded in 'units'."
+              }
+            }
+          }
+        },
+        "aiClaimRecallRate": null
+      },
+      "llama": {
+        "verdict": {
+          "checksPassed": 13,
+          "checksTotal": 13,
+          "passed": true
+        },
+        "provider": {
+          "requestedMode": "llama",
+          "statusModeBefore": "configured",
+          "statusModeAfter": "configured",
+          "provider": "OpenAI-compatible Llama",
+          "modelId": "llama3.2:3b",
+          "extractionRunStatus": "failed",
+          "documentsProcessed": 7,
+          "factsCreatedByExtraction": 10,
+          "isDemo": false
+        },
+        "facts": {
+          "total": 47,
+          "byExtractionMethod": {
+            "ai-extraction": 10,
+            "deterministic-parser": 37
+          },
+          "aiRowCount": 10,
+          "aiRowsWithQuantity": 5,
+          "aiRowsWithSubjectAndObject": 3,
+          "tokenRecallRate": 1,
+          "quantityRecallRate": 1,
+          "locatorPresentRate": 1,
+          "missingTokens": []
+        },
+        "links": {
+          "totalFinal": 7,
+          "requiredMatched": 7,
+          "requiredTotal": 7,
+          "missingRequired": [],
+          "expectedNoiseMatched": [],
+          "unexpectedLinks": [],
+          "linkCountExpected": 7
+        },
+        "matches": {
+          "totalFinal": 1,
+          "expected": [
+            {
+              "pairKey": "FL-4412::FL-44I2",
+              "found": true,
+              "state": "Deferred",
+              "stateOk": true
+            }
+          ],
+          "forbiddenPairsFound": []
+        },
+        "findings": {
+          "preReviewOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "45c5dc02-2039-4298-8c96-f831385a078a",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-3301",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "finalOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "45c5dc02-2039-4298-8c96-f831385a078a",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-3301",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "expectedPreReview": [
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-3301",
+              "found": true
+            },
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": null,
+              "found": true
+            }
+          ],
+          "expectedPostAlias": null,
+          "mustNotExist": [
+            {
+              "kind": "missing-upstream-evidence",
+              "violated": false
+            },
+            {
+              "kind": "ambiguous-identifier",
+              "violated": false
+            }
+          ]
+        },
+        "traces": {
+          "preReviewForward": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [],
+              "confirmedCustomers": [],
+              "possibleFinishedLots": [
+                "FL-4412",
+                "FL-4413"
+              ],
+              "possibleCustomers": [
+                "Drakensberg Grocers (Pty) Ltd"
+              ],
+              "nodes": [
+                "raw-lot:RM-3301",
+                "production-batch:PB-2026-1102-X",
+                "production-batch:PB-2026-1103-Y",
+                "finished-lot:FL-4412",
+                "finished-lot:FL-4413",
+                "customer:Drakensberg Grocers (Pty) Ltd"
+              ],
+              "stateCounts": {
+                "Candidate": 5,
+                "Confirmed": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": null,
+                "inputUnit": "",
+                "outputTotal": null,
+                "outputUnit": "",
+                "notes": "No quantity-bearing confirmed trace links were recorded in this path."
+              }
+            }
+          },
+          "postDecisionsBoth": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [
+                "FL-4412",
+                "FL-4413"
+              ],
+              "confirmedCustomers": [
+                "Drakensberg Grocers (Pty) Ltd"
+              ],
+              "possibleFinishedLots": [],
+              "possibleCustomers": [],
+              "nodes": [
+                "raw-lot:RM-3301",
+                "production-batch:PB-2026-1102-X",
+                "production-batch:PB-2026-1103-Y",
+                "supplier:Veld Groundnut Growers Co-op",
+                "finished-lot:FL-4412",
+                "finished-lot:FL-4413",
+                "customer:Drakensberg Grocers (Pty) Ltd"
+              ],
+              "stateCounts": {
+                "Confirmed": 6,
+                "Candidate": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": 500,
+                "inputUnit": "kg",
+                "outputTotal": 5500,
+                "outputUnit": "units",
+                "notes": "Unit conversion required: input is recorded in 'kg' while output is recorded in 'units'."
+              }
+            }
+          }
+        },
+        "aiClaimRecallRate": 0.6
+      },
+      "aiAddedValue": {
+        "aiExtractionRows": 10,
+        "aiRowsWithQuantity": 5,
+        "aiRowsWithSubjectAndObject": 3,
+        "aiClaimRecallRate": 0.6,
+        "tokensOnlyInLlamaMode": [],
+        "tokensOnlyInDeterministicMode": [],
+        "deterministicVerdict": {
+          "checksPassed": 13,
+          "checksTotal": 13,
+          "passed": true
+        },
+        "llamaVerdict": {
+          "checksPassed": 13,
+          "checksTotal": 13,
+          "passed": true
+        },
+        "llamaUnexpectedLinks": [],
+        "deterministicUnexpectedLinks": [],
+        "note": "Deterministic mode produces no AI-extraction rows by design (EXTRACTION_MODE=deterministic_only); AI claim recall is null there."
+      }
+    },
+    {
+      "scenario": "scenario_c_fragmented_evidence",
+      "deterministicOnly": {
+        "verdict": {
+          "checksPassed": 13,
+          "checksTotal": 13,
+          "passed": true
+        },
+        "provider": {
+          "requestedMode": "deterministic_only",
+          "statusModeBefore": "deterministic_only",
+          "statusModeAfter": "deterministic_only",
+          "provider": "DeterministicParser",
+          "modelId": "none",
+          "extractionRunStatus": "completed-deterministic",
+          "documentsProcessed": 6,
+          "factsCreatedByExtraction": 0,
+          "isDemo": false
+        },
+        "facts": {
+          "total": 35,
+          "byExtractionMethod": {
+            "deterministic-parser": 35
+          },
+          "aiRowCount": 0,
+          "aiRowsWithQuantity": 0,
+          "aiRowsWithSubjectAndObject": 0,
+          "tokenRecallRate": 1,
+          "quantityRecallRate": 1,
+          "locatorPresentRate": 1,
+          "missingTokens": []
+        },
+        "links": {
+          "totalFinal": 6,
+          "requiredMatched": 6,
+          "requiredTotal": 6,
+          "missingRequired": [],
+          "expectedNoiseMatched": [],
+          "unexpectedLinks": [],
+          "linkCountExpected": 6
+        },
+        "matches": {
+          "totalFinal": 1,
+          "expected": [
+            {
+              "pairKey": "RM-7702::RM-77O2",
+              "found": true,
+              "state": "Confirmed",
+              "stateOk": true
+            }
+          ],
+          "forbiddenPairsFound": []
+        },
+        "findings": {
+          "preReviewOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "e9c55b90-b90d-4d3d-b433-971dd586bb98",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-7702",
+              "status": "Open",
+              "title": "Ambiguous identifier needs review"
+            }
+          ],
+          "finalOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "e9c55b90-b90d-4d3d-b433-971dd586bb98",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-7702",
+              "status": "Open",
+              "title": "Ambiguous identifier needs review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-7702",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "expectedPreReview": [
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-7702",
+              "found": true
+            },
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": null,
+              "found": true
+            }
+          ],
+          "expectedPostAlias": [
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-7702",
+              "found": true
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-7702",
+              "found": true
+            },
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": null,
+              "found": true
+            }
+          ],
+          "mustNotExist": [
+            {
+              "kind": "missing-upstream-evidence",
+              "violated": false
+            }
+          ]
+        },
+        "traces": {
+          "preReviewSuspect": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [],
+              "confirmedCustomers": [],
+              "possibleFinishedLots": [],
+              "possibleCustomers": [],
+              "nodes": [
+                "raw-lot:RM-7702",
+                "supplier:Sunland Cocoa Trading (Pvt) Ltd"
+              ],
+              "stateCounts": {
+                "Candidate": 1,
+                "Confirmed": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": null,
+                "inputUnit": "",
+                "outputTotal": null,
+                "outputUnit": "",
+                "notes": "No quantity-bearing confirmed trace links were recorded in this path."
+              }
+            }
+          },
+          "preReviewVariant": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [],
+              "confirmedCustomers": [],
+              "possibleFinishedLots": [
+                "FL-5501"
+              ],
+              "possibleCustomers": [],
+              "nodes": [
+                "raw-lot:RM-77O2",
+                "production-batch:PB-2026-1205-C",
+                "finished-lot:FL-5501"
+              ],
+              "stateCounts": {
+                "Candidate": 2,
+                "Confirmed": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": null,
+                "inputUnit": "",
+                "outputTotal": null,
+                "outputUnit": "",
+                "notes": "No quantity-bearing confirmed trace links were recorded in this path."
+              }
+            }
+          },
+          "postAliasSuspect": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [
+                "FL-5501"
+              ],
+              "confirmedCustomers": [],
+              "possibleFinishedLots": [],
+              "possibleCustomers": [],
+              "nodes": [
+                "raw-lot:RM-7702",
+                "production-batch:PB-2026-1205-C",
+                "supplier:Sunland Cocoa Trading (Pvt) Ltd",
+                "finished-lot:FL-5501"
+              ],
+              "stateCounts": {
+                "Confirmed": 3,
+                "Candidate": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": 320,
+                "inputUnit": "kg",
+                "outputTotal": 1900,
+                "outputUnit": "units",
+                "notes": "Unit conversion required: input is recorded in 'kg' while output is recorded in 'units'."
+              }
+            }
+          }
+        },
+        "aiClaimRecallRate": null
+      },
+      "llama": {
+        "verdict": {
+          "checksPassed": 11,
+          "checksTotal": 13,
+          "passed": false
+        },
+        "provider": {
+          "requestedMode": "llama",
+          "statusModeBefore": "configured",
+          "statusModeAfter": "configured",
+          "provider": "OpenAI-compatible Llama",
+          "modelId": "llama3.2:3b",
+          "extractionRunStatus": "completed",
+          "documentsProcessed": 6,
+          "factsCreatedByExtraction": 12,
+          "isDemo": false
+        },
+        "facts": {
+          "total": 47,
+          "byExtractionMethod": {
+            "ai-extraction": 12,
+            "deterministic-parser": 35
+          },
+          "aiRowCount": 12,
+          "aiRowsWithQuantity": 7,
+          "aiRowsWithSubjectAndObject": 2,
+          "tokenRecallRate": 1,
+          "quantityRecallRate": 1,
+          "locatorPresentRate": 1,
+          "missingTokens": []
+        },
+        "links": {
+          "totalFinal": 9,
+          "requiredMatched": 6,
+          "requiredTotal": 6,
+          "missingRequired": [],
+          "expectedNoiseMatched": [],
+          "unexpectedLinks": [
+            {
+              "tuple": "raw_to_batch|rm-77o2|pb-2026-1206-d",
+              "state": "Candidate",
+              "detectionMethod": "ai-extraction"
+            },
+            {
+              "tuple": "supplier_delivery|sunland cocoa trading (pvt) ltd|rm-77o2",
+              "state": "Candidate",
+              "detectionMethod": "deterministic-parser"
+            },
+            {
+              "tuple": "raw_to_batch|rm-7702|pb-2026-1206-d",
+              "state": "Candidate",
+              "detectionMethod": "ai-extraction"
+            }
+          ],
+          "linkCountExpected": 6
+        },
+        "matches": {
+          "totalFinal": 1,
+          "expected": [
+            {
+              "pairKey": "RM-7702::RM-77O2",
+              "found": true,
+              "state": "Confirmed",
+              "stateOk": true
+            }
+          ],
+          "forbiddenPairsFound": []
+        },
+        "findings": {
+          "preReviewOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "16ca26ff-ce31-4484-a88d-f34e807f8b48",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-7702",
+              "status": "Open",
+              "title": "Ambiguous identifier needs review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-7702",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "finalOpen": [
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": "16ca26ff-ce31-4484-a88d-f34e807f8b48",
+              "status": "Open",
+              "title": "Candidate facts still need review"
+            },
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-7702",
+              "status": "Open",
+              "title": "Ambiguous identifier needs review"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-7702",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-77O2",
+              "status": "Open",
+              "title": "Received and consumed quantities differ"
+            }
+          ],
+          "expectedPreReview": [
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-7702",
+              "found": true
+            },
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": null,
+              "found": true
+            }
+          ],
+          "expectedPostAlias": [
+            {
+              "kind": "ambiguous-identifier",
+              "relatedEntityId": "RM-7702",
+              "found": true
+            },
+            {
+              "kind": "quantity-mismatch",
+              "relatedEntityId": "RM-7702",
+              "found": true
+            },
+            {
+              "kind": "unreviewed-candidates",
+              "relatedEntityId": null,
+              "found": true
+            }
+          ],
+          "mustNotExist": [
+            {
+              "kind": "missing-upstream-evidence",
+              "violated": false
+            }
+          ]
+        },
+        "traces": {
+          "preReviewSuspect": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": false,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": false,
+            "stateCountsOk": false,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [],
+              "confirmedCustomers": [],
+              "possibleFinishedLots": [
+                "FL-5501",
+                "FL-5502"
+              ],
+              "possibleCustomers": [],
+              "nodes": [
+                "raw-lot:RM-7702",
+                "production-batch:PB-2026-1205-C",
+                "production-batch:PB-2026-1206-D",
+                "supplier:Sunland Cocoa Trading (Pvt) Ltd",
+                "finished-lot:FL-5501",
+                "finished-lot:FL-5502"
+              ],
+              "stateCounts": {
+                "Candidate": 5,
+                "Confirmed": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": null,
+                "inputUnit": "",
+                "outputTotal": null,
+                "outputUnit": "",
+                "notes": "No quantity-bearing confirmed trace links were recorded in this path."
+              }
+            }
+          },
+          "preReviewVariant": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": true,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": true,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": true,
+            "stateCountsOk": true,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": true,
+            "massBalanceOutputOk": true,
+            "actual": {
+              "confirmedFinishedLots": [],
+              "confirmedCustomers": [],
+              "possibleFinishedLots": [
+                "FL-5501"
+              ],
+              "possibleCustomers": [],
+              "nodes": [
+                "raw-lot:RM-77O2",
+                "production-batch:PB-2026-1205-C",
+                "finished-lot:FL-5501"
+              ],
+              "stateCounts": {
+                "Candidate": 2,
+                "Confirmed": 0,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": null,
+                "inputUnit": "",
+                "outputTotal": null,
+                "outputUnit": "",
+                "notes": "No quantity-bearing confirmed trace links were recorded in this path."
+              }
+            }
+          },
+          "postAliasSuspect": {
+            "status": "checked",
+            "confirmedFinishedLotsOk": false,
+            "confirmedCustomersOk": true,
+            "possibleFinishedLotsOk": false,
+            "possibleCustomersOk": true,
+            "mustNotReachOk": false,
+            "stateCountsOk": false,
+            "massBalanceStatusOk": true,
+            "massBalanceInputOk": false,
+            "massBalanceOutputOk": false,
+            "actual": {
+              "confirmedFinishedLots": [],
+              "confirmedCustomers": [],
+              "possibleFinishedLots": [
+                "FL-5501",
+                "FL-5502"
+              ],
+              "possibleCustomers": [],
+              "nodes": [
+                "raw-lot:RM-77O2",
+                "production-batch:PB-2026-1205-C",
+                "production-batch:PB-2026-1206-D",
+                "supplier:Sunland Cocoa Trading (Pvt) Ltd",
+                "finished-lot:FL-5501",
+                "finished-lot:FL-5502"
+              ],
+              "stateCounts": {
+                "Candidate": 3,
+                "Confirmed": 2,
+                "Inferred": 0,
+                "Gap": 0,
+                "Rejected": 0
+              },
+              "massBalance": {
+                "status": "insufficient",
+                "inputTotal": null,
+                "inputUnit": "",
+                "outputTotal": null,
+                "outputUnit": "",
+                "notes": "No quantity-bearing confirmed trace links were recorded in this path."
+              }
+            }
+          }
+        },
+        "aiClaimRecallRate": 0.25
+      },
+      "aiAddedValue": {
+        "aiExtractionRows": 12,
+        "aiRowsWithQuantity": 7,
+        "aiRowsWithSubjectAndObject": 2,
+        "aiClaimRecallRate": 0.25,
+        "tokensOnlyInLlamaMode": [],
+        "tokensOnlyInDeterministicMode": [],
+        "deterministicVerdict": {
+          "checksPassed": 13,
+          "checksTotal": 13,
+          "passed": true
+        },
+        "llamaVerdict": {
+          "checksPassed": 11,
+          "checksTotal": 13,
+          "passed": false
+        },
+        "llamaUnexpectedLinks": [
+          {
+            "tuple": "raw_to_batch|rm-77o2|pb-2026-1206-d",
+            "state": "Candidate",
+            "detectionMethod": "ai-extraction"
+          },
+          {
+            "tuple": "supplier_delivery|sunland cocoa trading (pvt) ltd|rm-77o2",
+            "state": "Candidate",
+            "detectionMethod": "deterministic-parser"
+          },
+          {
+            "tuple": "raw_to_batch|rm-7702|pb-2026-1206-d",
+            "state": "Candidate",
+            "detectionMethod": "ai-extraction"
+          }
+        ],
+        "deterministicUnexpectedLinks": [],
+        "note": "Deterministic mode produces no AI-extraction rows by design (EXTRACTION_MODE=deterministic_only); AI claim recall is null there."
+      }
+    }
+  ],
+  "verdicts": {
+    "scenario_a_run4_baseline/deterministic_only": {
+      "checksPassed": 13,
+      "checksTotal": 13,
+      "passed": true
+    },
+    "scenario_a_run4_baseline/llama": {
+      "checksPassed": 13,
+      "checksTotal": 13,
+      "passed": true
+    },
+    "scenario_b_forward_trace/deterministic_only": {
+      "checksPassed": 13,
+      "checksTotal": 13,
+      "passed": true
+    },
+    "scenario_b_forward_trace/llama": {
+      "checksPassed": 13,
+      "checksTotal": 13,
+      "passed": true
+    },
+    "scenario_c_fragmented_evidence/deterministic_only": {
+      "checksPassed": 13,
+      "checksTotal": 13,
+      "passed": true
+    },
+    "scenario_c_fragmented_evidence/llama": {
+      "checksPassed": 11,
+      "checksTotal": 13,
+      "passed": false
+    }
+  }
+}

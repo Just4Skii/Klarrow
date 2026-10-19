@@ -1,0 +1,166 @@
+{
+  "scenarioId": "scenario_c_fragmented_evidence",
+  "title": "Fragmented evidence - cocoa moisture recall (RM-7702 / RM-77O2 / RM-07702)",
+  "lockedAt": "2026-10-19",
+  "lockedProvenance": "Authored and locked before the first evaluation execution of this scenario. Every expectation below was derived by hand from the document text and the deterministic engine rules at authoring time, including the pre-registered limitation that the deterministic near-match rule treats O/0 and I/1 confusables as equivalent but does NOT flag a leading-zero prefix variant (RM-07702).",
+  "investigation": {
+    "name": "Cocoa moisture recall - fragmented evidence (eval C)",
+    "reference": "EVAL-C-FRAG",
+    "suspectLotType": "raw-lot",
+    "suspectLotId": "RM-7702"
+  },
+  "requiredFacts": {
+    "tokens": [
+      "RM-7702",
+      "RM-77O2",
+      "RM-07702",
+      "PB-2026-1205-C",
+      "PB-2026-1206-D",
+      "FL-5501",
+      "FL-5502",
+      "Sunland Cocoa Trading (Pvt) Ltd",
+      "CB-2210",
+      "DN-90511",
+      "GRN-90511",
+      "CRN-3320"
+    ],
+    "quantities": [
+      { "value": 320, "unit": "kg" },
+      { "value": 300, "unit": "kg" },
+      { "value": 160, "unit": "kg" },
+      { "value": 120, "unit": "kg" },
+      { "value": 40, "unit": "kg" },
+      { "value": 1900, "unit": "units" },
+      { "value": 1400, "unit": "units" }
+    ],
+    "verbatimTraps": [
+      {
+        "fileName": "02_goods_received_note_GRN-90511.txt",
+        "contains": "320 kg",
+        "mustRemainVerbatim": true,
+        "note": "The GRN's 320 kg must coexist with the supplier note's 300 kg. Neither figure may be silently overwritten or averaged."
+      },
+      {
+        "fileName": "03_supplier_delivery_note_DN-90511.txt",
+        "contains": "300 kg",
+        "mustRemainVerbatim": true,
+        "note": "Conflicting receipt quantity kept as a distinct fact for human reconciliation."
+      },
+      {
+        "fileName": "04_cocoa_stock_ledger_oct_2026.csv",
+        "contains": "RM-77O2",
+        "mustRemainVerbatim": true,
+        "note": "O/0 variant stored verbatim; only the near-match decision may later map it."
+      },
+      {
+        "fileName": "04_cocoa_stock_ledger_oct_2026.csv",
+        "contains": "RM-07702",
+        "mustRemainVerbatim": true,
+        "note": "Leading-zero variant stored verbatim. Pre-registered limitation: the deterministic near-match rule does not flag it as a confusable; it is not proposed for aliasing and remains a separate lot unless a human decides otherwise. This is measured, not hidden."
+      }
+    ]
+  },
+  "requiredLinks": [
+    { "linkKind": "supplier_delivery", "fromType": "supplier", "fromId": "Sunland Cocoa Trading (Pvt) Ltd", "toType": "raw-lot", "toId": "RM-7702", "quantity": 320, "quantityUnit": "kg", "eventDate": "2026-09-30", "finalState": "Confirmed" },
+    { "linkKind": "raw_to_batch", "fromType": "raw-lot", "fromId": "RM-77O2", "toType": "production-batch", "toId": "PB-2026-1205-C", "quantity": 160, "quantityUnit": "kg", "finalState": "Candidate" },
+    { "linkKind": "raw_to_batch", "fromType": "raw-lot", "fromId": "RM-07702", "toType": "production-batch", "toId": "PB-2026-1206-D", "quantity": 120, "quantityUnit": "kg", "finalState": "Candidate" },
+    { "linkKind": "batch_to_finished", "fromType": "production-batch", "fromId": "PB-2026-1205-C", "toType": "finished-lot", "toId": "FL-5501", "quantity": 1900, "quantityUnit": "units", "finalState": "Confirmed" },
+    { "linkKind": "batch_to_finished", "fromType": "production-batch", "fromId": "PB-2026-1206-D", "toType": "finished-lot", "toId": "FL-5502", "quantity": 1400, "quantityUnit": "units", "finalState": "Confirmed" },
+    { "linkKind": "raw_to_batch", "fromType": "raw-lot", "fromId": "RM-7702", "toType": "production-batch", "toId": "PB-2026-1205-C", "quantity": 160, "quantityUnit": "kg", "finalState": "Confirmed", "note": "Canonical replacement link created by post-alias regeneration and confirmed by the decision script (see confirmNewCanonicalLinksAfterRegeneration). Added to requiredLinks on 2026-10-19 before first execution; the decision script always required this outcome." }
+  ],
+  "expectedNoiseLinks": [],
+  "forbiddenLinkPatterns": [
+    { "description": "The credit-return row must not create any relationship.", "evidenceContainsAny": ["credit-return", "CRN-3320"], "endpointKinds": ["raw_to_batch", "supplier_delivery", "batch_to_finished"] },
+    { "description": "The supplier delivery note (DN-90511) carries no internal lot code and must not create any relationship even though its filename matches the delivery heuristic.", "evidenceContainsAny": ["DN-90511"], "endpointKinds": ["supplier_delivery", "raw_to_batch"] },
+    { "description": "No dispatch link may be invented in this scenario: no dispatch document exists.", "endpointKinds": ["finished_to_dispatch"] }
+  ],
+  "expectedMatchProposals": [
+    {
+      "pairUnordered": ["RM-7702", "RM-77O2"],
+      "stableKey": "near-match:RM-7702:RM-77O2",
+      "score": 0.5,
+      "scoreKind": "heuristic-not-calibrated",
+      "initialState": "Candidate",
+      "finalStateAfterScript": "Confirmed"
+    }
+  ],
+  "forbiddenMatchPairs": [
+    { "pairUnordered": ["RM-7702", "RM-07702"], "note": "Pre-registered limitation: the deterministic near-match rule does not flag leading-zero variants. This pair must NOT appear as a proposal; the limitation is reported in the evaluation, not patched silently." },
+    { "pairUnordered": ["RM-77O2", "RM-07702"] },
+    { "pairUnordered": ["CB-2210", "RB-2210"] }
+  ],
+  "expectedFindings": {
+    "preReviewKindsWithEntity": [
+      { "kind": "ambiguous-identifier", "relatedEntityType": "raw-lot", "relatedEntityId": "RM-7702" },
+      { "kind": "unreviewed-candidates" }
+    ],
+    "postAliasKindsWithEntity": [
+      { "kind": "ambiguous-identifier", "relatedEntityType": "raw-lot", "relatedEntityId": "RM-7702" },
+      { "kind": "quantity-mismatch", "relatedEntityType": "raw-lot", "relatedEntityId": "RM-7702" },
+      { "kind": "unreviewed-candidates" }
+    ],
+    "mustNotExistKinds": [
+      "missing-upstream-evidence"
+    ],
+    "note": "Before the alias decision there is no quantity-mismatch finding because RM-7702 has no consumed links at all (both issues sit on variant codes; GapEngine requires received>0 and consumed>0). After confirming the RM-7702/RM-77O2 alias and regenerating, the canonical consumed total is 160 kg -> mismatch 320 vs 160 is expected. The RM-07702 chain (120 kg) stays outside forever unless a human manually resolves that variant, which the deterministic rule never proposes."
+  },
+  "expectedAiClaims": [
+    { "subjectContains": "RM-7702", "quantity": 320, "unit": "kg" },
+    { "subjectContains": "RM-77O2", "quantity": 160, "unit": "kg" },
+    { "subjectContains": "RM-07702", "quantity": 120, "unit": "kg" },
+    { "subjectContains": "RM-77O2", "quantity": 40, "unit": "kg", "note": "Credit-return quantity captured as a fact; must not appear in any link." }
+  ],
+  "expectedAiClaimNote": "Ideal structured interpretation rows for Llama-mode extraction; scored only in llama mode (null in deterministic-only mode). Whether the model surfaces RM-07702 as a related identifier is measured, not assumed.",
+  "decisionScript": {
+    "confirmLinks": [
+      { "linkKind": "supplier_delivery", "fromId": "Sunland Cocoa Trading (Pvt) Ltd", "toId": "RM-7702" },
+      { "linkKind": "batch_to_finished", "fromId": "PB-2026-1205-C", "toId": "FL-5501" },
+      { "linkKind": "batch_to_finished", "fromId": "PB-2026-1206-D", "toId": "FL-5502" }
+    ],
+    "rejectLinks": [],
+    "matchDecisions": [
+      { "pairUnordered": ["RM-7702", "RM-77O2"], "action": "confirm", "reason": "Evaluation C script: physical count matched; ledger O/0 typo accepted as the same lot." }
+    ],
+    "regenerateAfterAlias": true,
+    "confirmNewCanonicalLinksAfterRegeneration": [
+      { "linkKind": "raw_to_batch", "fromId": "RM-7702", "toId": "PB-2026-1205-C" }
+    ],
+    "traces": [
+      { "label": "preReviewSuspect", "selectedType": "raw-lot", "selectedId": "RM-7702", "direction": "both", "traceBeforeDecisions": true },
+      { "label": "preReviewVariant", "selectedType": "raw-lot", "selectedId": "RM-77O2", "direction": "both", "traceBeforeDecisions": true },
+      { "label": "postAliasSuspect", "selectedType": "raw-lot", "selectedId": "RM-7702", "direction": "both" }
+    ]
+  },
+  "expectedTrace": {
+    "preReviewSuspect": {
+      "confirmedFinishedLots": [],
+      "confirmedCustomers": [],
+      "possiblyReachableFinishedLots": [],
+      "possiblyReachableCustomers": [],
+      "mustNotReach": ["FL-5501", "FL-5502"],
+      "massBalanceStatus": "insufficient",
+      "stateCounts": { "Confirmed": 0, "Candidate": 1 }
+    },
+    "preReviewVariant": {
+      "confirmedFinishedLots": [],
+      "confirmedCustomers": [],
+      "possiblyReachableFinishedLots": ["FL-5501"],
+      "possiblyReachableCustomers": [],
+      "mustNotReach": ["FL-5502"],
+      "massBalanceStatus": "insufficient",
+      "stateCounts": { "Confirmed": 0, "Candidate": 2 }
+    },
+    "postAliasSuspect": {
+      "confirmedFinishedLots": ["FL-5501"],
+      "confirmedCustomers": [],
+      "possiblyReachableFinishedLots": [],
+      "possiblyReachableCustomers": [],
+      "mustNotReach": ["FL-5502"],
+      "massBalanceStatus": "insufficient",
+      "massBalanceInput": { "value": 320, "unit": "kg" },
+      "massBalanceOutput": { "value": 1900, "unit": "units" },
+          "stateCounts": { "Confirmed": 3, "Candidate": 0 },
+          "stateCountsNote": "Audit history: original pre-registered value was Candidate:0. On 2026-10-19 a pre-execution mechanics review changed it to Candidate:1, assuming the old RM-77O2->PB-2026-1205-C candidate link would be traversed backwards into the post-alias scope. That assumption was wrong: the first execution of this scenario (run eval-dev-20261019-d) showed the engine resolves the variant's candidate edge onto the canonical RM-7702 node and dedupes it against the confirmed canonical raw_to_batch edge, so the post-alias scope honestly counts 0 Candidate edges (and the trace summary states '3 confirmed, 0 pending review'). The value was reverted to the original pre-registered Candidate:0; this history is preserved for audit."
+    }
+  }
+}

@@ -350,3 +350,29 @@ export interface CapabilityStatusDto {
   licenseRegister: string;
   setup: string;
 }
+
+export interface AccessControlDto {
+  mode: string;
+  notice: string;
+}
+
+export interface HealthDto {
+  status: string;
+  time: string;
+  service: string;
+  accessControl: AccessControlDto;
+}
+
+export interface InvestigationDeleteResultDto {
+  deleted: boolean;
+  investigationId: string;
+  reference: string;
+  documentsDeleted: number;
+  factsDeleted: number;
+  reviewEventsDeleted: number;
+  traceLinksDeleted: number;
+  traceRunsDeleted: number;
+  findingsDeleted: number;
+  filesDeleted: number;
+  limitations: string[];
+}

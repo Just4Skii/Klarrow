@@ -1,0 +1,3 @@
+DISPATCH NOTE
+DSP-5011 | 2026-09-28 | warehouse 1 | FL-1021A | 1,800 units | Bosveld Tuckshop Distributors | XYZ Logistics
+Transport note: ambient pallets, two pallets shrink-wrapped and sealed; proof of receipt to follow.

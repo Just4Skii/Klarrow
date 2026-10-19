@@ -1,0 +1,5 @@
+date,movement,reference,lot_code,to_batch,quantity,unit
+2026-09-25,receipt,RCP-7701,RM-3301,,500,kg
+2026-10-01,issue,WO-3310,RM-3301,PB-2026-1102-X,300,kg
+2026-10-02,issue,WO-3311,RM-3301,PB-2026-1103-Y,150,kg
+2026-10-05,credit-return,CRN-2210,RM-3301,damaged bags returned to supplier,50,kg

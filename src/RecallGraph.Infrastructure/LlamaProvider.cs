@@ -11,6 +11,8 @@ public sealed record LlamaOptions(
     string Model,
     int TimeoutSeconds)
 {
+    /// <summary>Evaluation switch: when true, Llama candidate extraction is skipped while the deterministic parse, review, trace and export workflow continues unchanged.</summary>
+    public bool IsDisabled { get; init; }
     public bool IsConfigured => !string.IsNullOrWhiteSpace(Endpoint) && !string.IsNullOrWhiteSpace(Model);
     public static LlamaOptions FromEnvironment()
     {
@@ -19,7 +21,12 @@ public sealed record LlamaOptions(
         var model = Environment.GetEnvironmentVariable("LLAMA_MODEL") ?? "meta-llama/Llama-3.1-70B-Instruct";
         var timeoutText = Environment.GetEnvironmentVariable("LLAMA_TIMEOUT_SECONDS") ?? "30";
         if (!int.TryParse(timeoutText, out var timeout) || timeout < 5) timeout = 30;
-        return new LlamaOptions(endpoint.TrimEnd('/'), key, model, timeout);
+        var mode = Environment.GetEnvironmentVariable("EXTRACTION_MODE") ?? string.Empty;
+        var disabledText = Environment.GetEnvironmentVariable("LLAMA_EXTRACTION_DISABLED") ?? string.Empty;
+        var disabled = string.Equals(mode, "deterministic_only", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(disabledText, "true", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(disabledText, "1", StringComparison.OrdinalIgnoreCase);
+        return new LlamaOptions(endpoint.TrimEnd('/'), key, model, timeout) { IsDisabled = disabled };
     }
 }
 
@@ -67,6 +74,16 @@ public sealed class OpenAiCompatibleLlamaProvider(HttpClient httpClient, LlamaOp
     {
         get
         {
+            if (options.IsDisabled) return new AiProviderStatusDto
+            {
+                IsConfigured = false,
+                Mode = "deterministic_only",
+                Provider = "none",
+                ModelId = string.Empty,
+                Endpoint = options.Endpoint,
+                Message = "Deterministic-only evaluation mode: Llama candidate extraction is disabled for this instance. Deterministic parsing, human review, trace and export workflows continue unchanged.",
+                SetupInstructions = "Set EXTRACTION_MODE=deterministic_plus_llama (or leave it unset) and configure LLAMA_API_BASE_URL and LLAMA_MODEL to enable local Llama candidate extraction."
+            };
             if (!options.IsConfigured) return new AiProviderStatusDto
             {
                 IsConfigured = false,
@@ -190,10 +207,17 @@ File name: {{fileName}}
             if (!doc.RootElement.TryGetProperty("facts", out var factsElement) || factsElement.ValueKind != JsonValueKind.Array) { error = "Response is missing facts array."; return false; }
             foreach (var item in factsElement.EnumerateArray())
             {
-                if (item.ValueKind != JsonValueKind.Object) { error = "Fact is not an object."; return false; }
-                if (!item.TryGetProperty("rawValue", out var rawValueElement) || rawValueElement.ValueKind != JsonValueKind.String) { error = "Fact rawValue must be a string."; return false; }
+                if (item.ValueKind != JsonValueKind.Object) continue;
+                if (!item.TryGetProperty("rawValue", out var rawValueElement)) continue;
+                string? rawValueText = rawValueElement.ValueKind switch
+                {
+                    JsonValueKind.String => rawValueElement.GetString(),
+                    JsonValueKind.Number or JsonValueKind.True or JsonValueKind.False => rawValueElement.GetRawText(),
+                    _ => null
+                };
+                if (string.IsNullOrWhiteSpace(rawValueText)) continue;
                 facts.Add(new LlmFactCandidate(
-                    rawValueElement.GetString() ?? string.Empty,
+                    rawValueText!,
                     GetNullableString(item, "normalizedValue"),
                     GetNullableString(item, "documentType"),
                     GetNullableString(item, "issuingEntity"),

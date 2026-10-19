@@ -1,0 +1,4 @@
+PRODUCTION LOG - PEANUT RUNS, OCTOBER 2026
+Run 1 input: PB-2026-1103-Y | RM-3301 | 150 kg | peanut blend | source note per issue slip WO-3311
+Run 1 output: PB-2026-1103-Y | FL-4413 | 1,600 units | packed 30 g | awaiting warehouse allocation
+Line stoppage log: 09:15-09:24 metal detector calibration; maintenance sign-off completed.

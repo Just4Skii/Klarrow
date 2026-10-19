@@ -15,14 +15,16 @@ public sealed class MetaCapabilityService(LlamaOptions llamaOptions, RecallGraph
                 Id = "llama-extraction",
                 Name = "Meta Llama",
                 Version = string.IsNullOrWhiteSpace(llamaOptions.Model) ? "not-configured" : llamaOptions.Model,
-                ExecutionMode = llamaOptions.IsConfigured ? "local-openai-compatible" : "unavailable",
-                Availability = llamaOptions.IsConfigured ? "configured" : "unavailable",
+                ExecutionMode = llamaOptions.IsDisabled ? "deterministic-only" : llamaOptions.IsConfigured ? "local-openai-compatible" : "unavailable",
+                Availability = llamaOptions.IsDisabled ? "disabled-for-evaluation" : llamaOptions.IsConfigured ? "configured" : "unavailable",
                 RealInferenceExecuted = liveFacts,
-                Detail = llamaOptions.IsConfigured
-                    ? (liveFacts
-                        ? $"Configured and a live run of {llamaOptions.Model} has produced candidate facts with per-fact grounding status. Facts still require human review."
-                        : "Configured. No live extraction has completed yet; run the smoke endpoint or an extraction first.")
-                    : "Set LLAMA_API_BASE_URL, LLAMA_API_KEY, and LLAMA_MODEL. Ollama or another OpenAI-compatible local server may be used.",
+                Detail = llamaOptions.IsDisabled
+                    ? "Deterministic-only evaluation mode: Llama candidate extraction is disabled. Deterministic parsing, human review, trace and export workflows continue unchanged."
+                    : llamaOptions.IsConfigured
+                        ? (liveFacts
+                            ? $"Configured and a live run of {llamaOptions.Model} has produced candidate facts with per-fact grounding status. Facts still require human review."
+                            : "Configured. No live extraction has completed yet; run the smoke endpoint or an extraction first.")
+                        : "Set LLAMA_API_BASE_URL, LLAMA_API_KEY, and LLAMA_MODEL. Ollama or another OpenAI-compatible local server may be used.",
                 LicenseRegister = "docs/model-and-software-licenses.md#meta-llama",
                 Setup = "LLAMA_API_BASE_URL=http://127.0.0.1:11434/v1 LLAMA_MODEL=llama3.2:3b dotnet run --project src/RecallGraph.Api"
             },

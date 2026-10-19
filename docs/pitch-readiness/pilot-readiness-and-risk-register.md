@@ -9,7 +9,7 @@
 
 | Area | Status | Current Engineering State | Pilot Pre-requisite |
 |------|--------|---------------------------|---------------------|
-| **Core Trace Traversal** | **Ready** | Dual-traversal BFS cleanly isolates confirmed scope from candidate exposure. Tested via the current 40-test automated suite. | Single-tenant prototype; not production-grade. |
+| **Core Trace Traversal** | **Ready** | Dual-traversal BFS cleanly isolates confirmed scope from candidate exposure. Tested via the current 43-test automated suite and the three-scenario evaluation suite. | Single-tenant prototype; not production-grade. |
 | **Evidence Extraction** | **Ready (Pilot)** | Deterministic parsers handle CSV, TSV, TXT, PDF, EML, and LOG. Ollama Llama 3.2:3b local LLM integration operational; grounding is split into value-in-quote, adjacent-line context, identifier-only and unlocated states. | Scanned PDFs require clean text layer (native text or pre-OCR). |
 | **Relationship Pipeline** | **Ready** | Automated relationship engine generates candidate proposals across receipt, batching, packaging, and dispatch. Auto-registers entities in catalog. | Operator review required before confirming candidate edges. |
 | **Integrity & Auditing** | **Ready** | Rejection invalidation cascade, immutable audit log, CSV formula sanitization, dynamic suspect lot detection. | Prototype-grade; dependency advisories and SSO/RBAC remain open. |
@@ -34,7 +34,7 @@
 ## 3. Pilot Deployment Checklist
 
 ```
-[X] 1. Automated integration test suite passing (40/40 tests) after the Run 4 changes.
+[X] 1. Automated integration test suite passing (43/43 tests) after the Run 4 and evaluation-suite changes.
 [X] 2. Dual confirmed vs. possible scope traversal implemented and verified.
 [X] 3. Verbatim source text grounding and no line-1 fallback in extraction.
 [X] 4. Multi-investigation gap finding isolation verified.

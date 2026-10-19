@@ -1,0 +1,5 @@
+BATCH PRODUCTION SHEET
+PB-2026-1205-C | 2026-10-04 | Line 3 | Cocoa dusted bites 30 g
+Input consumed: PB-2026-1205-C | RM-77O2 | 160 kg | cocoa blend per recipe R-31
+Output packed: PB-2026-1205-C | FL-5501 | 1,900 units | packed 30 g | released to warehouse
+Operator notes: routine line checks completed; no stoppages recorded.

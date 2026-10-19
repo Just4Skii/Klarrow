@@ -1,0 +1,21 @@
+{
+  "scenarioId": "scenario_b_forward_trace",
+  "title": "Forward trace - peanut aflatoxin notice (RM-3301)",
+  "lockedAt": "2026-10-19",
+  "provenance": {
+    "description": "Authored synthetic evidence for the evaluation suite. Expectations locked before the first execution of this scenario, derived by hand from the document text and the engine's deterministic rules (RelationshipService, MatchService, GapEngine, TraceService).",
+    "authoredBy": "Klarrow evaluation suite",
+    "copyVerifiedOn": "2026-10-19"
+  },
+  "documents": [
+    { "fileName": "01_supplier_quality_notice_NT-3301.txt", "sizeBytes": 869, "sha256": "81275e86008b0660859c178865028284a6b23b81bf5e3405e092e0a74591d851", "role": "context-only prose" },
+    { "fileName": "02_goods_received_note_GRN-88213.txt", "sizeBytes": 271, "sha256": "35653b333b1b6e030f430161968e0fdffa5f153bb8d56da6028a743a38917912", "role": "structured receipt" },
+    { "fileName": "03_peanut_stock_ledger_oct_2026.csv", "sizeBytes": 292, "sha256": "04709f125ea4feb7916b949c3d715eb132887fa23b15e829ddffdf8fa0ebb95b", "role": "structured ledger with credit-return false-positive trap" },
+    { "fileName": "04_batch_sheet_PB-2026-1102-X.txt", "sizeBytes": 340, "sha256": "d8029616f359bc6f2be72a005e5fa594595039af10c27000154c808daaff704c", "role": "structured batch sheet" },
+    { "fileName": "05_production_log_PB-2026-1103-Y.txt", "sizeBytes": 332, "sha256": "91bfb22dc45ac36eca46ac3f82826b1b66d56e019005ccf853cc6898c1282df9", "role": "structured production log" },
+    { "fileName": "06_dispatch_note_DSP-6202.txt", "sizeBytes": 221, "sha256": "b518b52c8e94c8299756076e9204dbd1023961529301bc9ff81893aab304cc51", "role": "structured dispatch (canonical lot)" },
+    { "fileName": "07_dispatch_note_DSP-6201.txt", "sizeBytes": 332, "sha256": "485540460adfdb1102fe416dee9e21b2a0235d59f6c6119a4151e84cdf6c0c0b", "role": "structured dispatch (I/1 confusable variant); revised 2026-10-19 before the first execution of this scenario - one line added so the extracted fact subject is FL-44I2 itself, making the confusable code discoverable by the deterministic match and gap checks" }
+  ],
+  "userFacingDisclosure": "All names, lots and quantities are fictional and were authored for this evaluation.",
+  "notes": "Do not modify these files. Any change invalidates the locked ground truth reference of the evaluation suite. Revisions made before the first execution are recorded per file with updated hashes; no run results had been observed."
+}

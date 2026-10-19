@@ -1,0 +1,7 @@
+scenario,mode,verdict,factsTotal,aiRows,tokenRecallRate,quantityRecallRate,aiClaimRecallRate,requiredLinksMatched,requiredLinksTotal,forbiddenLinksFound
+scenario_a_run4_baseline,deterministic_only,PASS,35,0,1,1,,7,7,
+scenario_a_run4_baseline,llama,PASS,50,15,1,1,1,7,7,
+scenario_b_forward_trace,deterministic_only,PASS,37,0,1,1,,7,7,
+scenario_b_forward_trace,llama,PASS,47,10,1,1,0.6,7,7,
+scenario_c_fragmented_evidence,deterministic_only,PASS,35,0,1,1,,6,6,
+scenario_c_fragmented_evidence,llama,FAIL,47,12,1,1,0.25,6,6,
