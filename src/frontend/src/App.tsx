@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { api } from "./api";
+import { api, publicDemoMode } from "./api";
 import type {
   AiProviderStatusDto,
   AuditEventDto,
@@ -71,6 +71,9 @@ import {
   reasonRequiredForConfirm,
   type EditDraft
 } from "./reviewLogic";
+
+// Public-demo build flag (see api.ts publicDemoMode): hide upload affordances when set.
+// The API also enforces upload rejection server-side when Demo__PublicMode is enabled.
 
 type Tab =
   | "home"
@@ -1922,6 +1925,16 @@ export default function App() {
                     <section className="panel" aria-labelledby="import-heading">
                       <span className="eyebrow">Chain of Custody</span>
                       <h2 id="import-heading">Import Evidence File</h2>
+                      {publicDemoMode ? (
+                        <div className="dropzone">
+                          <Icon name="upload" width={22} height={22} />
+                          <p><strong>Public demonstration workspace — uploads are disabled.</strong></p>
+                          <p className="dropzone-meta">
+                            The pre-loaded synthetic evidence set is fully interactive: review claims, confirm
+                            relationships and run traces. Pilot installations use this same flow with live uploads.
+                          </p>
+                        </div>
+                      ) : (
                       <div
                         className={`dropzone${dragActive ? " is-active" : ""}`}
                         onDragOver={(e) => {
@@ -1956,6 +1969,7 @@ export default function App() {
                           Supports PDF, CSV, XLSX, TSV, TXT, LOG, EML, PNG, JPG - up to {MAX_UPLOAD_MB} MB
                         </p>
                       </div>
+                      )}
                       <p className="setup-hint">
                         {isSyntheticWorkspace
                           ? "Synthetic demonstration workspace: keep uploads synthetic. Not for operational recall decisions."
@@ -1980,20 +1994,28 @@ export default function App() {
                       <Icon name="search" width={16} height={16} />
                       <input value={docQuery} onChange={(e) => setDocQuery(e.target.value)} placeholder="Search filename or category…" />
                     </label>
-                    <label className="button button-primary" htmlFor="evidence-inbox-upload" style={{ cursor: "pointer" }}>
-                      <Icon name="upload" width={16} height={16} /> Upload Evidence
-                    </label>
-                    <input
-                      id="evidence-inbox-upload"
-                      className="visually-hidden"
-                      type="file"
-                      accept={ACCEPTED_FORMATS}
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) void onUpload(file);
-                        e.target.value = "";
-                      }}
-                    />
+                    {publicDemoMode ? (
+                      <span className="setup-hint" style={{ alignSelf: "center" }}>
+                        Public demo: uploads disabled
+                      </span>
+                    ) : (
+                      <>
+                        <label className="button button-primary" htmlFor="evidence-inbox-upload" style={{ cursor: "pointer" }}>
+                          <Icon name="upload" width={16} height={16} /> Upload Evidence
+                        </label>
+                        <input
+                          id="evidence-inbox-upload"
+                          className="visually-hidden"
+                          type="file"
+                          accept={ACCEPTED_FORMATS}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) void onUpload(file);
+                            e.target.value = "";
+                          }}
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
 

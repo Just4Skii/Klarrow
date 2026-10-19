@@ -23,11 +23,19 @@ import type {
 
 const API_KEY_STORAGE = "recallgraph.apiKey";
 
+// Deployment-aware API base: empty string = same-origin (Vite dev proxy, or the API serving this UI itself).
+// Set VITE_API_BASE at build time when the UI is hosted separately from the API (e.g. GraffGrid Pages -> Render).
+const API_BASE: string = (import.meta.env.VITE_API_BASE as string | undefined)?.replace(/\/$/, "") ?? "";
+
+export const publicDemoMode: boolean = import.meta.env.VITE_PUBLIC_DEMO === "1" || (typeof window !== "undefined" && window.location.pathname.startsWith("/demo"));
+
+const resolveUrl = (path: string): string => (path.startsWith("/") ? `${API_BASE}${path}` : path);
+
 const request = async (path: string, init: RequestInit = {}): Promise<Response> => {
   const headers = new Headers(init.headers);
   const key = sessionStorage.getItem(API_KEY_STORAGE);
   if (key) headers.set("X-Api-Key", key);
-  const res = await fetch(path, { ...init, headers });
+  const res = await fetch(resolveUrl(path), { ...init, headers });
   if (!res.ok) {
     if (res.status === 401) throw new Error("Unauthorized. Enter the pilot API key to continue.");
     throw new Error((await res.text()) || res.statusText);

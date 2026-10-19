@@ -1,0 +1,31 @@
+# Klarrow public demo blueprint for Render (Docker runtime).
+#
+# Deploy: Render dashboard -> Blueprints -> New Instance -> connect Just4Skii/Klarrow.
+#
+# Storage note: the free plan has an ephemeral filesystem, so the demo database and
+# evidence files reset on every restart/redeploy - acceptable for a synthetic-only
+# demo stage; the seed service re-creates the Savanna Bites workspace on boot.
+# Upgrading the instance to a paid plan allows attaching a persistent volume, which
+# mounts at /app/data (the Storage:DataRoot) to keep state across restarts.
+
+services:
+  - type: web
+    name: klarrow
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: Demo__PublicMode
+        value: "true"
+      - key: RateLimit__Enabled
+        value: "true"
+      - key: RateLimit__PermitsPerMinute
+        value: "120"
+      - key: CORS__Origins__0
+        value: https://graffgrid.co.za
+      - key: CORS__Origins__1
+        value: https://just4skii.github.io

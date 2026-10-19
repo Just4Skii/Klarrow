@@ -6,7 +6,7 @@ namespace RecallGraph.Api.Controllers;
 
 [ApiController]
 [Route("api/documents")]
-public sealed class DocumentsController(WorkspaceService workspaces, DocumentService documents, AuditService audit) : ControllerBase
+public sealed class DocumentsController(WorkspaceService workspaces, DocumentService documents, AuditService audit, IConfiguration configuration) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<DocumentDto>>> List([FromQuery] Guid? investigationId, CancellationToken ct)
@@ -35,6 +35,14 @@ public sealed class DocumentsController(WorkspaceService workspaces, DocumentSer
     [RequestSizeLimit(11 * 1024 * 1024)]
     public async Task<ActionResult<ImportResultDto>> Upload(IFormFile file, [FromForm] Guid? investigationId, CancellationToken ct)
     {
+        // Public-demo deployment flag (Demo__PublicMode=true): visitors work with the pre-seeded
+        // synthetic evidence set only. Server-side enforcement; the UI also hides upload affordances.
+        if (configuration.GetValue("Demo:PublicMode", false))
+        {
+            return StatusCode(StatusCodes.Status403Forbidden,
+                "Public demonstration workspace: evidence uploads are disabled. This workspace runs on a pre-seeded, resettable synthetic evidence set. Pilot installations enable uploads with their own authorized records.");
+        }
+
         if (file == null || file.Length == 0) return BadRequest("File is required.");
         var ws = await workspaces.GetOrCreateDemoAsync(ct);
         await using var stream = file.OpenReadStream();

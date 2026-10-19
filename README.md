@@ -71,6 +71,18 @@ Double-click **`start-klarrow.cmd`** in the repository root. It starts the API a
 
 ## 4. Modes & Security Guards
 
+### Public Demo Deployment (Render blueprint)
+
+`render.yaml` deploys this repository as a single Docker container (API + pre-built UI in `wwwroot/`) with:
+
+| Guard | Mechanism |
+| :--- | :--- |
+| **No public uploads** | `Demo__PublicMode=true` -> `POST /api/documents/upload` returns 403; the UI also hides upload affordances (`VITE_PUBLIC_DEMO=1` build flag) |
+| **Synthetic seed only** | `Seed:DemoEnabled=true` (default): the Savanna Bites workspace is pre-seeded and resettable |
+| **Abuse control** | `RateLimit__Enabled=true`: per-IP fixed window (120 req/min default, 429 beyond) — off in local dev and the test harness |
+| **Cross-origin UI** | `CORS__Origins__N` entries allow the UI to be hosted separately (e.g. GraffGrid Pages `/work/klarrow`) while the API lives here |
+| **API key** | `RecallGraph__ApiKey` remains optional; public demo deployments leave it unset and rely on the limits above |
+
 ### Synthetic Demonstration vs. Pilot Workspace
 - **Synthetic demonstration mode (default):** Pre-seeds the `Savanna Bites` workspace with labelled synthetic records (raw lot `RM-0427`, finished lots `FL-0514`, `FL-0515`, and lookalike `FL-0516`). The UI shows a persistent synthetic-data banner, the API reports the workspace mode and synthetic document count, and exports carry a synthetic-data provenance notice.
 - **Pilot mode:** Run with `$env:Seed__DemoEnabled="false"` to initialize a clean, unpopulated workspace with no synthetic records. Pilot exports carry a pilot-workspace notice instead. Seeded synthetic records are always tagged wherever they appear, including when they are mixed into a pilot workspace.
