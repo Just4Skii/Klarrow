@@ -26,6 +26,9 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 WORKDIR /app
 COPY --from=api-build /app/publish/ ./
 COPY --from=ui-build /ui/dist/ ./wwwroot/
+# Synthetic demo evidence pack ships IN the image (deterministic seed source);
+# runtime-created SQLite/uploads live under the /app/data volume instead.
+COPY seed/evidence/ ./seed/evidence/
 # Storage root is bind-mounted (persistent disk in deployment) so SQLite + evidence survive restarts.
 VOLUME ["/app/data"]
 ENTRYPOINT ["sh", "-c", "exec dotnet RecallGraph.Api.dll --urls http://0.0.0.0:${PORT:-10000}"]

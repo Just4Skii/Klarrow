@@ -15,6 +15,6 @@ evaluation/
 real_fda_evidence/
 recallgraph_cat_jam_challenge_bundle/
 submission/
-seed/
-*.md
-!src/*/README.md
+pitchathon-video/
+seed/*
+!seed/evidence
